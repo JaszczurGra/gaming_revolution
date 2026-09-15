@@ -40,6 +40,19 @@ interface HistoryResponse {
   photosUploaded: number
 }
 
+const MOBILE_QUERY = '(max-width: 768px)'
+
+function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia(MOBILE_QUERY).matches)
+  useEffect(() => {
+    const mql = window.matchMedia(MOBILE_QUERY)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
+  }, [])
+  return isMobile
+}
+
 function extractAppBlocks(text: string): { display: string; board: string | null; options: string[] | null } {
   let display = text
   let board: string | null = null
@@ -66,6 +79,7 @@ function extractAppBlocks(text: string): { display: string; board: string | null
 }
 
 export default function App() {
+  const isMobile = useIsMobile()
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [text, setText] = useState('')
   const [pendingFiles, setPendingFiles] = useState<File[]>([])
@@ -192,6 +206,34 @@ export default function App() {
     }
   }
 
+  // Mobile: a captured photo sends immediately instead of staging into pendingFiles for a
+  // separate Send tap. Still bundles whatever's in the text field, same as send().
+  async function sendFiles(files: File[]) {
+    if (!files.length) return
+    const trimmed = text.trim()
+    const insertedAtIndex = messages.length
+    const form = new FormData()
+    form.append('text', trimmed)
+    files.forEach((f) => form.append('files', f))
+
+    setSending(true)
+    setError('')
+    setText('')
+
+    try {
+      const data = await postTurn(form)
+      const urls = files.map((f) => URL.createObjectURL(f))
+      setLocalPreviews((prev) => ({ ...prev, [insertedAtIndex]: urls }))
+      setMessages(data.messages)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Request failed')
+      setText(trimmed)
+      setPendingFiles(files)
+    } finally {
+      setSending(false)
+    }
+  }
+
   // Sends a canned message (quick-prompt buttons, the confirm button) independent of whatever
   // is currently drafted in the composer's text box. Still attaches any staged photos, in case
   // the user picked one before tapping a quick prompt.
@@ -246,8 +288,87 @@ export default function App() {
     if (e.dataTransfer.files?.length) addFiles(e.dataTransfer.files)
   }
 
+  function renderBubble(m: ParsedMessage, i: number) {
+    return (
+      <div key={i} className={`bubble ${m.role}`}>
+        <div className="bubble-role">{m.role === 'user' ? 'You' : 'Assistant'}</div>
+        {localPreviews[i] && (
+          <div className="thumbs">
+            {localPreviews[i].map((url, j) => (
+              <img key={j} src={url} alt={`upload ${j + 1}`} />
+            ))}
+          </div>
+        )}
+        {!localPreviews[i] && m.photoCount > 0 && (
+          <div className="photo-chip">
+            📷 {m.photoCount} photo{m.photoCount > 1 ? 's' : ''}
+          </div>
+        )}
+        {m.role === 'assistant' && m.board && <div className="board-chip">🗺️ Board updated — see panel</div>}
+        {m.display && (
+          <div className="bubble-text">
+            {m.role === 'assistant' ? <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.display}</ReactMarkdown> : m.display}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  function renderTail() {
+    return (
+      <>
+        {sending && (
+          <div className="bubble assistant pending">
+            <div className="bubble-role">Assistant</div>
+            <div className="bubble-text typing">thinking…</div>
+          </div>
+        )}
+
+        {!sending && lastMessageIsAssistant && lastOptions && lastOptions.length > 0 && (
+          <div className="options-bar">
+            {lastOptions.map((opt) => (
+              <button key={opt} className="option-btn" onClick={() => sendQuick(opt)}>
+                {opt}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {!sending && lastMessageIsAssistant && !(lastOptions && lastOptions.length > 0) && (
+          <div className="confirm-bar">
+            <span>Does this look right?</span>
+            <button className="confirm-btn" onClick={() => sendQuick('CONFIRMED')}>
+              ✓ Correct
+            </button>
+          </div>
+        )}
+      </>
+    )
+  }
+
+  function renderBoardPanel() {
+    return (
+      <aside className="board-panel">
+        <h2>Current board state</h2>
+        {boardState ? (
+          <BoardDiagram board={boardState} />
+        ) : rawBoardState ? (
+          <details className="board-fallback">
+            <summary>Couldn't render the board graphically — raw data</summary>
+            <pre>{rawBoardState}</pre>
+          </details>
+        ) : (
+          <p className="hint">
+            Nothing yet — upload a photo of the board and the assistant's read of it will show up
+            here, kept up to date every turn.
+          </p>
+        )}
+      </aside>
+    )
+  }
+
   return (
-    <div className="app">
+    <div className={`app${isMobile ? ' app-mobile' : ''}`}>
       <header className="app-header">
         <h1>Board Game Assistant</h1>
         <button className="reset-btn" onClick={resetGame} title="Start a new game">
@@ -255,90 +376,30 @@ export default function App() {
         </button>
       </header>
 
-      <div className="layout">
-        <main className="chat" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-          {loadingHistory && <p className="hint">Loading...</p>}
-          {!loadingHistory && messages.length === 0 && (
-            <p className="hint">
-              Upload a photo of the board or your hand, or just start typing, to begin.
-            </p>
-          )}
-
-          {parsedMessages.map((m, i) => (
-            <div key={i} className={`bubble ${m.role}`}>
-              <div className="bubble-role">{m.role === 'user' ? 'You' : 'Assistant'}</div>
-              {localPreviews[i] && (
-                <div className="thumbs">
-                  {localPreviews[i].map((url, j) => (
-                    <img key={j} src={url} alt={`upload ${j + 1}`} />
-                  ))}
-                </div>
-              )}
-              {!localPreviews[i] && m.photoCount > 0 && (
-                <div className="photo-chip">
-                  📷 {m.photoCount} photo{m.photoCount > 1 ? 's' : ''}
-                </div>
-              )}
-              {m.role === 'assistant' && m.board && (
-                <div className="board-chip">🗺️ Board updated — see panel</div>
-              )}
-              {m.display && (
-                <div className="bubble-text">
-                  {m.role === 'assistant' ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.display}</ReactMarkdown>
-                  ) : (
-                    m.display
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
-
-          {sending && (
-            <div className="bubble assistant pending">
-              <div className="bubble-role">Assistant</div>
-              <div className="bubble-text typing">thinking…</div>
-            </div>
-          )}
-
-          {!sending && lastMessageIsAssistant && lastOptions && lastOptions.length > 0 && (
-            <div className="options-bar">
-              {lastOptions.map((opt) => (
-                <button key={opt} className="option-btn" onClick={() => sendQuick(opt)}>
-                  {opt}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {!sending && lastMessageIsAssistant && !(lastOptions && lastOptions.length > 0) && (
-            <div className="confirm-bar">
-              <span>Does this look right?</span>
-              <button className="confirm-btn" onClick={() => sendQuick('CONFIRMED')}>
-                ✓ Correct
-              </button>
-            </div>
-          )}
-          <div ref={bottomRef} />
-        </main>
-
-        <aside className="board-panel">
-          <h2>Current board state</h2>
-          {boardState ? (
-            <BoardDiagram board={boardState} />
-          ) : rawBoardState ? (
-            <details className="board-fallback">
-              <summary>Couldn't render the board graphically — raw data</summary>
-              <pre>{rawBoardState}</pre>
-            </details>
-          ) : (
-            <p className="hint">
-              Nothing yet — upload a photo of the board and the assistant's read of it will show
-              up here, kept up to date every turn.
-            </p>
-          )}
-        </aside>
-      </div>
+      {isMobile ? (
+        <div className="layout layout-mobile">
+          {renderBoardPanel()}
+          <main className="chat chat-mobile">
+            {loadingHistory && <p className="hint">Loading...</p>}
+            {!loadingHistory && messages.length === 0 && <p className="hint">Take a photo to begin.</p>}
+            {lastMessage && renderBubble(lastMessage, parsedMessages.length - 1)}
+            {renderTail()}
+          </main>
+        </div>
+      ) : (
+        <div className="layout">
+          <main className="chat" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+            {loadingHistory && <p className="hint">Loading...</p>}
+            {!loadingHistory && messages.length === 0 && (
+              <p className="hint">Upload a photo of the board or your hand, or just start typing, to begin.</p>
+            )}
+            {parsedMessages.map(renderBubble)}
+            {renderTail()}
+            <div ref={bottomRef} />
+          </main>
+          {renderBoardPanel()}
+        </div>
+      )}
 
       {error && <div className="error-banner">{error}</div>}
 
@@ -381,32 +442,40 @@ export default function App() {
           capture="environment"
           hidden
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            if (e.target.files) addFiles(e.target.files)
+            const files = e.target.files
+            if (files && files.length) {
+              if (isMobile) sendFiles(Array.from(files))
+              else addFiles(files)
+            }
             e.target.value = ''
           }}
         />
-        <button
-          className="attach-btn"
-          onClick={() => fileInputRef.current?.click()}
-          title="Attach photo(s) from gallery"
-          disabled={sending}
-        >
-          🖼️
-        </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          hidden
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            if (e.target.files) addFiles(e.target.files)
-            e.target.value = ''
-          }}
-        />
+        {!isMobile && (
+          <>
+            <button
+              className="attach-btn"
+              onClick={() => fileInputRef.current?.click()}
+              title="Attach photo(s) from gallery"
+              disabled={sending}
+            >
+              🖼️
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files) addFiles(e.target.files)
+                e.target.value = ''
+              }}
+            />
+          </>
+        )}
         <textarea
           rows={1}
-          placeholder="Ask a question, describe a move, or attach a photo..."
+          placeholder={isMobile ? 'Reply...' : 'Ask a question, describe a move, or attach a photo...'}
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}

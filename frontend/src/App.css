@@ -393,3 +393,32 @@
     max-height: 40vh;
   }
 }
+
+/* Compact single-screen mode (see useIsMobile in App.tsx) — no chat scrollback, just the board,
+   the latest message, and the composer, so the whole thing fits without scrolling the page. */
+.app-mobile {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.layout-mobile {
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.layout-mobile .board-panel {
+  flex: 0 0 auto;
+  max-width: none;
+  max-height: 38vh;
+  border-left: none;
+  border-top: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.chat-mobile {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  justify-content: flex-end;
+}
