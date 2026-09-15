@@ -1,0 +1,6 @@
+{
+  "name": "GamePlay Companion",
+  "description": "Play games with an AI chatbot that analyzes uploaded PDF rules to act as Teacher, Judge, or Player, with fake login and saved game progress.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
