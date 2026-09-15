@@ -200,6 +200,29 @@
   background: #276b2b;
 }
 
+.options-bar {
+  align-self: flex-start;
+  max-width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.option-btn {
+  border: 1px solid var(--accent-border);
+  background: var(--bg);
+  color: var(--accent);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.option-btn:hover {
+  background: var(--accent-bg);
+}
+
 .photo-chip,
 .board-chip {
   display: inline-block;
@@ -239,6 +262,32 @@
     background: #3a1414;
     color: #f88;
   }
+}
+
+.quick-prompts {
+  display: flex;
+  gap: 8px;
+  padding: 10px 20px 0;
+  flex-wrap: wrap;
+}
+
+.quick-prompt-btn {
+  border: 1px solid var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.quick-prompt-btn:hover {
+  background: var(--accent-border);
+}
+
+.quick-prompt-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .pending-strip {

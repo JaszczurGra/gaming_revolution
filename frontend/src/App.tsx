@@ -10,8 +10,18 @@ import './App.css'
 // would otherwise mean that other device rather than this one. Override with VITE_API_BASE.
 const API_BASE = import.meta.env.VITE_API_BASE || `${window.location.protocol}//${window.location.hostname}:8000`
 
-// Must match rag.py's BOARD_STATE_START / BOARD_STATE_END exactly.
+// Must match rag.py's BOARD_STATE_START / BOARD_STATE_END and OPTIONS_START / OPTIONS_END exactly.
 const BOARD_STATE_RE = /<!--\s*BOARD_STATE_START\s*-->([\s\S]*?)<!--\s*BOARD_STATE_END\s*-->/
+const OPTIONS_RE = /<!--\s*OPTIONS_START\s*-->([\s\S]*?)<!--\s*OPTIONS_END\s*-->/
+
+const START_PROMPTS = ['Summarize the rules', 'Step by step setup walkthrough']
+
+const QUICK_PROMPTS = [
+  "What's next?",
+  'What are my possibilities?',
+  'Best move for Red?',
+  'Best move for Blue?',
+]
 
 interface ChatMessage {
   role: 'user' | 'assistant'
@@ -22,6 +32,7 @@ interface ChatMessage {
 interface ParsedMessage extends ChatMessage {
   display: string
   board: string | null
+  options: string[] | null
 }
 
 interface HistoryResponse {
@@ -29,12 +40,29 @@ interface HistoryResponse {
   photosUploaded: number
 }
 
-function splitBoardState(text: string): { display: string; board: string | null } {
-  const match = text.match(BOARD_STATE_RE)
-  if (!match || match.index === undefined) return { display: text, board: null }
-  const board = match[1].trim()
-  const display = (text.slice(0, match.index) + text.slice(match.index + match[0].length)).trim()
-  return { display, board }
+function extractAppBlocks(text: string): { display: string; board: string | null; options: string[] | null } {
+  let display = text
+  let board: string | null = null
+  let options: string[] | null = null
+
+  const boardMatch = display.match(BOARD_STATE_RE)
+  if (boardMatch && boardMatch.index !== undefined) {
+    board = boardMatch[1].trim()
+    display = display.slice(0, boardMatch.index) + display.slice(boardMatch.index + boardMatch[0].length)
+  }
+
+  const optionsMatch = display.match(OPTIONS_RE)
+  if (optionsMatch && optionsMatch.index !== undefined) {
+    try {
+      const parsed = JSON.parse(optionsMatch[1].trim())
+      if (Array.isArray(parsed) && parsed.every((o) => typeof o === 'string')) options = parsed
+    } catch {
+      options = null
+    }
+    display = display.slice(0, optionsMatch.index) + display.slice(optionsMatch.index + optionsMatch[0].length)
+  }
+
+  return { display: display.trim(), board, options }
 }
 
 export default function App() {
@@ -48,6 +76,11 @@ export default function App() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const cameraInputRef = useRef<HTMLInputElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const sendingRef = useRef(sending)
+
+  useEffect(() => {
+    sendingRef.current = sending
+  }, [sending])
 
   useEffect(() => {
     fetch(`${API_BASE}/api/history`)
@@ -55,6 +88,23 @@ export default function App() {
       .then((data: HistoryResponse) => setMessages(data.messages))
       .catch(() => setError('Could not reach the backend. Is it running?'))
       .finally(() => setLoadingHistory(false))
+  }, [])
+
+  // The game session lives on the backend, shared by every tab/device that opens this app (e.g.
+  // your phone over Tailscale while a laptop is also open) — poll so a turn sent from one shows
+  // up on the other without a manual refresh. Skip while this tab is mid-send (its own postTurn
+  // response already updates state) or hidden, and never treat a failed poll as a real error.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (sendingRef.current || document.visibilityState !== 'visible') return
+      fetch(`${API_BASE}/api/history`)
+        .then((res) => res.json())
+        .then((data: HistoryResponse) => {
+          setMessages((prev) => (JSON.stringify(prev) === JSON.stringify(data.messages) ? prev : data.messages))
+        })
+        .catch(() => {})
+    }, 4000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -75,8 +125,8 @@ export default function App() {
     () =>
       messages.map((m) =>
         m.role === 'assistant'
-          ? { ...m, ...splitBoardState(m.text) }
-          : { ...m, display: m.text, board: null },
+          ? { ...m, ...extractAppBlocks(m.text) }
+          : { ...m, display: m.text, board: null, options: null },
       ),
     [messages],
   )
@@ -90,8 +140,9 @@ export default function App() {
 
   const boardState = useMemo(() => (rawBoardState ? parseBoardState(rawBoardState) : null), [rawBoardState])
 
-  const lastMessageIsAssistant =
-    parsedMessages.length > 0 && parsedMessages[parsedMessages.length - 1].role === 'assistant'
+  const lastMessage = parsedMessages.length > 0 ? parsedMessages[parsedMessages.length - 1] : null
+  const lastMessageIsAssistant = lastMessage?.role === 'assistant'
+  const lastOptions = lastMessageIsAssistant ? lastMessage?.options ?? null : null
 
   function addFiles(fileList: FileList) {
     const images = Array.from(fileList).filter((f) => f.type.startsWith('image/'))
@@ -141,16 +192,30 @@ export default function App() {
     }
   }
 
-  async function sendConfirmation() {
+  // Sends a canned message (quick-prompt buttons, the confirm button) independent of whatever
+  // is currently drafted in the composer's text box. Still attaches any staged photos, in case
+  // the user picked one before tapping a quick prompt.
+  async function sendQuick(promptText: string) {
+    const insertedAtIndex = messages.length
+    const filesForThisTurn = pendingFiles
+    const form = new FormData()
+    form.append('text', promptText)
+    filesForThisTurn.forEach((f) => form.append('files', f))
+
     setSending(true)
     setError('')
+    setPendingFiles([])
+
     try {
-      const form = new FormData()
-      form.append('text', 'CONFIRMED')
       const data = await postTurn(form)
+      if (filesForThisTurn.length) {
+        const urls = filesForThisTurn.map((f) => URL.createObjectURL(f))
+        setLocalPreviews((prev) => ({ ...prev, [insertedAtIndex]: urls }))
+      }
       setMessages(data.messages)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Request failed')
+      setPendingFiles(filesForThisTurn)
     } finally {
       setSending(false)
     }
@@ -236,10 +301,20 @@ export default function App() {
             </div>
           )}
 
-          {!sending && lastMessageIsAssistant && (
+          {!sending && lastMessageIsAssistant && lastOptions && lastOptions.length > 0 && (
+            <div className="options-bar">
+              {lastOptions.map((opt) => (
+                <button key={opt} className="option-btn" onClick={() => sendQuick(opt)}>
+                  {opt}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {!sending && lastMessageIsAssistant && !(lastOptions && lastOptions.length > 0) && (
             <div className="confirm-bar">
               <span>Does this look right?</span>
-              <button className="confirm-btn" onClick={sendConfirmation}>
+              <button className="confirm-btn" onClick={() => sendQuick('CONFIRMED')}>
                 ✓ Correct
               </button>
             </div>
@@ -266,6 +341,16 @@ export default function App() {
       </div>
 
       {error && <div className="error-banner">{error}</div>}
+
+      {!loadingHistory && (
+        <div className="quick-prompts">
+          {(messages.length === 0 ? START_PROMPTS : QUICK_PROMPTS).map((p) => (
+            <button key={p} className="quick-prompt-btn" onClick={() => sendQuick(p)} disabled={sending}>
+              {p}
+            </button>
+          ))}
+        </div>
+      )}
 
       {pendingFiles.length > 0 && (
         <div className="pending-strip">

@@ -4,20 +4,37 @@ Put a RAG package for the game (a system_prompt.md + corpus_full.md pair, see th
 to them) in a subfolder of resources/rags/.
 """
 
+import mimetypes
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 RAGS_DIR = BASE_DIR / "resources" / "rags"
-MODEL = "gemini-3.5-flash"
+MODEL = "gemini-3.8-flash"
 
 # Markers the model wraps its board-state transcription in, so the frontend can pull it out of
 # the reply and show it in a dedicated, always-current panel instead of only in chat scrollback.
 BOARD_STATE_START = "<!-- BOARD_STATE_START -->"
 BOARD_STATE_END = "<!-- BOARD_STATE_END -->"
 
+# Markers around a JSON array of option labels for a multiple-choice question, so the frontend
+# can render them as clickable buttons instead of the user having to type an answer.
+OPTIONS_START = "<!-- OPTIONS_START -->"
+OPTIONS_END = "<!-- OPTIONS_END -->"
+
 # The corpus itself is game content, not app behavior, so it doesn't say anything about our
 # multi-photo turn-by-turn convention. This note bridges the two.
 PHOTO_NOTE = """
+
+## App-specific note: proactively ask what you need to get moving
+
+At the start of a new game, or whenever you're missing something concrete you need in order to \
+help well, ask for it directly instead of giving a vague answer or leaving the ball in the \
+user's court with nothing specific to respond to. On a brand new game with no board established \
+yet, that usually means asking, in order: map type (offer this as clickable options — beginner \
+fixed vs. variable), player count and each player's color, and how the starting player was \
+decided — or ask them to roll and tell you the result if that hasn't happened yet. Once that's \
+answered, move straight to the next concrete question or step rather than waiting to be \
+prompted again.
 
 ## App-specific note: reading the attached photos
 
@@ -29,6 +46,13 @@ photo) before answering.
 Some older photos may appear below as a bracketed "[Photo(s) summarized to save context]" text \
 block instead of the original image — that's this app compacting old images out of context to \
 save space. Treat the summary as a faithful description of what those photos showed.
+
+If the very first thing below is a close-up photo of a city, a settlement, a road, and resource \
+cards with no board in view, that is a standing reference photo the app primes every session \
+with (not something the user just sent) — it exists so you know exactly what this particular \
+set's pieces look like before you have to tell them apart in an actual board or hand photo. Use \
+it as a visual reference throughout the conversation; don't ask the user about it or treat it as \
+the current game state.
 
 ## App-specific note: orienting custom boards and confirming the layout
 
@@ -48,6 +72,29 @@ number instead (e.g. "Row D1 is 11, not 10"), update the JSON snapshot immediate
 This audit-and-confirm step is only for reading a new or changed board *layout*. Once a layout \
 is confirmed, treat it as settled — don't re-run the audit for photos that only change hands, \
 dice, or pieces on that same layout.
+
+## App-specific note: step-by-step setup walkthrough
+
+When the user asks for a step-by-step setup walkthrough (e.g. via the "Step by step setup \
+walkthrough" quick-start button), guide them one concrete action at a time instead of dumping \
+the whole setup procedure at once:
+
+1. Tell them exactly what to do for the *current* step only, following the order in \
+`rules-05-setup-phase` (map + player count, then each player's first settlement+road in turn \
+order, then the second in reverse order with starting resources).
+2. Ask them to take and upload a photo showing the result of that step before you continue.
+3. When the photo arrives, verify it actually shows that step done correctly — the same \
+scrutiny as the board-audit and event-verification notes above — before moving on. If \
+something's off or ambiguous, say so and wait for a corrected photo or an answer instead of \
+proceeding.
+4. Once a step is confirmed, move to the next one, repeating steps 1-3, until setup is fully \
+complete (every player's starting settlements/roads placed and starting resources collected).
+5. Only once setup is confirmed complete, shift into explaining the rules: answer whatever \
+rules question prompted this walkthrough, or if none was asked, give a short overview of how a \
+turn works (`rules-06-turn-structure`) so the group knows what happens next.
+
+If the user asks an unrelated rules question mid-setup, answer it briefly, then return to \
+guiding the current setup step rather than abandoning the walkthrough.
 
 ## App-specific note: verifying inferred game events
 
@@ -77,6 +124,44 @@ The app also has a green confirm button that, when pressed, sends the user's tur
 the word "CONFIRMED" with nothing else. Treat it as a general "yes, that's all correct" for \
 whatever you most recently said or showed — not only for a board layout — and move on \
 accordingly (e.g. proceed with the move advice, or drop the ambiguity you'd flagged).
+
+## App-specific note: multiple-choice questions (clickable options)
+
+Whenever you ask the user to pick from a small, fixed set of options (e.g. "beginner fixed map \
+or variable map?", "which player's hand is this?"), also emit a JSON array of the exact option \
+labels wrapped like this, so the app can show them as clickable buttons instead of making the \
+user type an answer:
+
+<<OPTIONS_START>>
+["Beginner fixed map", "Variable map"]
+<<OPTIONS_END>>
+
+Rules for this block:
+- Keep each label short (a few words), and phrase it exactly as you want it echoed back — \
+clicking a button sends its label back to you verbatim, as if the user had typed it.
+- Only for a genuine multiple-choice question with 2-4 fixed options. Never for open-ended \
+questions, and never bundled with a request for free-form details (hand contents, a \
+description of what happened, missing info you can't turn into a short pick-list, etc.).
+- Don't emit this in the same reply as a board-layout confirmation ask (the note above) — that \
+one already has its own dedicated confirm button; pick whichever single mechanism fits the \
+question you're actually asking.
+- Emitting this block replaces the app's generic confirm button for that turn, so don't also \
+ask a plain yes/no here — phrase the choice itself as the options.
+
+## App-specific note: keep the chat reply short — the graphical panel shows the full board
+
+The board panel (below) already displays every hex, number, harbor, robber position, road, and \
+building graphically. Don't also write out that same tile-by-tile transcription as prose in your \
+conversational reply — it just duplicates the panel and is tedious to read as chat. This \
+overrides `vision-18-reading-photos`'s "output the structured transcription before any \
+analysis" step for the reply text specifically: that structured detail still belongs in the \
+JSON snapshot below, just not repeated as prose in the message itself.
+
+In the reply itself, write only what a player actually wants to see: a short take on what \
+changed or what you saw, any ambiguity or rule violation you're flagging, and your actual \
+question or advice. Still name specific hexes/coordinates when they're the actual subject of \
+what you're saying (e.g. "the desert at B3 has a number token, which shouldn't happen") — the \
+point is to stop dumping the whole board, not to stop using coordinates.
 
 ## App-specific note: live board-state panel (structured data)
 
@@ -127,6 +212,10 @@ a direct check like "Does this look right?" so the user can quickly confirm or c
     "<<BOARD_STATE_START>>", BOARD_STATE_START
 ).replace(
     "<<BOARD_STATE_END>>", BOARD_STATE_END
+).replace(
+    "<<OPTIONS_START>>", OPTIONS_START
+).replace(
+    "<<OPTIONS_END>>", OPTIONS_END
 )
 
 
@@ -153,3 +242,17 @@ def load_rules() -> str:
     if not sections:
         print(f"Warning: no rules found in {RAGS_DIR}")
     return PHOTO_NOTE + "\n\n" + "\n\n".join(sections)
+
+
+def load_piece_reference() -> tuple[bytes, str] | None:
+    """A close-up photo of this set's own city/settlement/road pieces, if the RAG package has
+    one (resources/rags/<game>/piece_reference.*) — primed into every session (see
+    GameSession._prime_with_piece_reference) so the model knows what they look like before it
+    has to tell them apart in an actual board or hand photo."""
+    path = next(RAGS_DIR.rglob("piece_reference.*"), None)
+    if not path:
+        return None
+    mime_type, _ = mimetypes.guess_type(path.name)
+    if not mime_type or not mime_type.startswith("image/"):
+        return None
+    return path.read_bytes(), mime_type

@@ -15,7 +15,7 @@ import threading
 from google import genai
 from google.genai import types
 
-from rag import MODEL, load_rules
+from rag import MODEL, load_piece_reference, load_rules
 
 # How many of the most recent photo-upload turns are kept as raw images in context. Once a new
 # upload pushes the count above this, the oldest excess turns are collapsed into a text summary.
@@ -60,6 +60,43 @@ class GameSession:
         self.photos_uploaded = 0
         self.turns_since_photo = 0
         self._lock = threading.Lock()
+        # contents[:_protected_turns] (e.g. the piece-reference photo) are never swept into
+        # _compact_old_photos, so they stay raw for the whole session no matter how many real
+        # game photos come in after them.
+        self._protected_turns = 0
+        self._prime_with_piece_reference()
+
+    def _prime_with_piece_reference(self) -> None:
+        ref = load_piece_reference()
+        if not ref:
+            return
+        data, mime_type = ref
+        intro = types.Content(
+            role="user",
+            parts=[
+                types.Part.from_bytes(data=data, mime_type=mime_type),
+                types.Part.from_text(
+                    text=(
+                        "Reference photo: this set's own city, settlement, and road pieces, "
+                        "up close, with no board in view. Use it to recognize these pieces in "
+                        "later board and hand photos."
+                    )
+                ),
+            ],
+        )
+        ack = types.Content(
+            role="model",
+            parts=[
+                types.Part.from_text(
+                    text=(
+                        "Got it — I'll use this as the reference for what this set's city, "
+                        "settlement, and road pieces look like."
+                    )
+                )
+            ],
+        )
+        self.contents.extend([intro, ack])
+        self._protected_turns = len(self.contents)
 
     def to_dict(self) -> dict:
         return {
@@ -127,7 +164,9 @@ class GameSession:
         photo_turn_indices = [
             i
             for i, content in enumerate(self.contents)
-            if content.role == "user" and any(part.inline_data for part in content.parts)
+            if i >= self._protected_turns
+            and content.role == "user"
+            and any(part.inline_data for part in content.parts)
         ]
         if len(photo_turn_indices) <= MAX_RAW_PHOTO_TURNS:
             return

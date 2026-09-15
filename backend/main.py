@@ -48,7 +48,7 @@ def main():
         config=types.GenerateContentConfig(system_instruction=load_rules()),
     )
 
-    images = load_images()
+    images = []#load_images()
     print(f"Sending {len(images)} photo(s) to Gemini...")
     intro = (
         f"Here are {len(images)} photos in chronological order (photo 1 is earliest). "
