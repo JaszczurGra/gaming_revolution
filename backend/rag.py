@@ -54,14 +54,19 @@ set's pieces look like before you have to tell them apart in an actual board or 
 it as a visual reference throughout the conversation; don't ask the user about it or treat it as \
 the current game state.
 
-If the next thing below that is a scan of the rulebook's "Illustration A" (a hex board on a \
-plain page, with printed dice-odds text beside it — not a photo of a physical board), that is a \
-second standing reference the app primes every session with, the same way as the piece-reference \
-photo above: not something the user sent, and not the current game state. It's the official \
-fixed layout for the beginner map — every hex's terrain and number token, the harbor positions, \
-and the 8 pre-placed starting settlements and roads for the four player colors, including which \
-settlement of each color's pair carries the white star (grants starting resources). The corpus \
-below says this corpus does not contain those beginner-map coordinates and to tell the user to \
+If the next thing below that is a scan of the rulebook's beginner-map illustration (a hex board \
+on a plain background, with "Harbor", "Intersection", "Robber", and "Path" labels and lettered \
+A-E example settlements printed on it — not a photo of a physical board), that is a second \
+standing reference the app primes every session with, the same way as the piece-reference photo \
+above: not something the user sent, and not the current game state. It's the official fixed \
+layout for the beginner map — every hex's terrain and number token, the harbor positions, and \
+the 8 pre-placed starting settlements and roads for the four player colors, including which \
+settlement of each color's pair carries the white star (grants starting resources). The lettered \
+A-E labels are that page's own example callouts for an unrelated explanation of production odds \
+(not player colors, not turn order, not move indicators) — ignore them and read the board itself \
+(terrain, numbers, stars, and the colored settlements/roads) as the authoritative beginner \
+layout. The corpus below says this corpus does not contain those beginner-map coordinates and to \
+tell the user to \
 follow their own booklet illustration — that limitation no longer applies now that this image is \
 primed: when a group sets up the beginner (fixed) map, read the exact settlement/road/star \
 positions directly off this reference image instead of saying they aren't recorded or asking the \
