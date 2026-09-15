@@ -15,7 +15,7 @@ import threading
 from google import genai
 from google.genai import types
 
-from rag import MODEL, load_piece_reference, load_rules
+from rag import MODEL, load_beginner_setup_reference, load_piece_reference, load_rules
 
 # How many of the most recent photo-upload turns are kept as raw images in context. Once a new
 # upload pushes the count above this, the oldest excess turns are collapsed into a text summary.
@@ -65,6 +65,7 @@ class GameSession:
         # game photos come in after them.
         self._protected_turns = 0
         self._prime_with_piece_reference()
+        self._prime_with_beginner_setup_reference()
 
     def _prime_with_piece_reference(self) -> None:
         ref = load_piece_reference()
@@ -91,6 +92,41 @@ class GameSession:
                     text=(
                         "Got it — I'll use this as the reference for what this set's city, "
                         "settlement, and road pieces look like."
+                    )
+                )
+            ],
+        )
+        self.contents.extend([intro, ack])
+        self._protected_turns = len(self.contents)
+
+    def _prime_with_beginner_setup_reference(self) -> None:
+        ref = load_beginner_setup_reference()
+        if not ref:
+            return
+        data, mime_type = ref
+        intro = types.Content(
+            role="user",
+            parts=[
+                types.Part.from_bytes(data=data, mime_type=mime_type),
+                types.Part.from_text(
+                    text=(
+                        "Reference image: the rulebook's official 'Illustration A' — the fixed "
+                        "board layout for the beginner (fixed) map, with every hex's terrain and "
+                        "number token, the harbor positions, and the 8 pre-placed starting "
+                        "settlements and roads for the four player colors, including which "
+                        "settlement of each color's pair carries the white star. Use it to "
+                        "answer exactly where beginner-map pieces start."
+                    )
+                ),
+            ],
+        )
+        ack = types.Content(
+            role="model",
+            parts=[
+                types.Part.from_text(
+                    text=(
+                        "Got it — I'll use this as the exact starting layout whenever a group "
+                        "sets up the beginner (fixed) map."
                     )
                 )
             ],

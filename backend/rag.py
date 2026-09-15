@@ -54,6 +54,19 @@ set's pieces look like before you have to tell them apart in an actual board or 
 it as a visual reference throughout the conversation; don't ask the user about it or treat it as \
 the current game state.
 
+If the next thing below that is a scan of the rulebook's "Illustration A" (a hex board on a \
+plain page, with printed dice-odds text beside it — not a photo of a physical board), that is a \
+second standing reference the app primes every session with, the same way as the piece-reference \
+photo above: not something the user sent, and not the current game state. It's the official \
+fixed layout for the beginner map — every hex's terrain and number token, the harbor positions, \
+and the 8 pre-placed starting settlements and roads for the four player colors, including which \
+settlement of each color's pair carries the white star (grants starting resources). The corpus \
+below says this corpus does not contain those beginner-map coordinates and to tell the user to \
+follow their own booklet illustration — that limitation no longer applies now that this image is \
+primed: when a group sets up the beginner (fixed) map, read the exact settlement/road/star \
+positions directly off this reference image instead of saying they aren't recorded or asking the \
+user to describe or photograph their booklet.
+
 ## App-specific note: orienting custom boards and confirming the layout
 
 Custom boards with hand-written or dot-less tokens (no pips) are especially easy to misread — \
@@ -250,6 +263,22 @@ def load_piece_reference() -> tuple[bytes, str] | None:
     GameSession._prime_with_piece_reference) so the model knows what they look like before it
     has to tell them apart in an actual board or hand photo."""
     path = next(RAGS_DIR.rglob("piece_reference.*"), None)
+    if not path:
+        return None
+    mime_type, _ = mimetypes.guess_type(path.name)
+    if not mime_type or not mime_type.startswith("image/"):
+        return None
+    return path.read_bytes(), mime_type
+
+
+def load_beginner_setup_reference() -> tuple[bytes, str] | None:
+    """A scan of the rulebook's official beginner-map illustration — the fixed board layout with
+    every hex's terrain/number, harbor positions, and the 8 pre-placed starting settlements and
+    roads including the white-star positions — if the RAG package has one
+    (resources/rags/<game>/beginner_setup_reference.*). Primed into every session (see
+    GameSession._prime_with_beginner_setup_reference) so the model can read the exact positions
+    off the image instead of telling the user they aren't recorded in the corpus."""
+    path = next(RAGS_DIR.rglob("beginner_setup_reference.*"), None)
     if not path:
         return None
     mime_type, _ = mimetypes.guess_type(path.name)

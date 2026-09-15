@@ -25,7 +25,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --text: #9ca3af;
     --text-h: #f3f4f6;
     --bg: #16171d;
@@ -38,6 +38,21 @@
     --bubble-user: rgba(192, 132, 252, 0.15);
     --bubble-assistant: #1f2028;
   }
+}
+
+/* Explicit override from the theme toggle, independent of OS preference. */
+:root[data-theme='dark'] {
+  --text: #9ca3af;
+  --text-h: #f3f4f6;
+  --bg: #16171d;
+  --bg-alt: #1b1c23;
+  --border: #2e303a;
+  --code-bg: #1f2028;
+  --accent: #c084fc;
+  --accent-bg: rgba(192, 132, 252, 0.15);
+  --accent-border: rgba(192, 132, 252, 0.5);
+  --bubble-user: rgba(192, 132, 252, 0.15);
+  --bubble-assistant: #1f2028;
 }
 
 * {
@@ -97,4 +112,15 @@ td {
   border: 1px solid var(--border);
   padding: 4px 8px;
   text-align: left;
+}
+
+.theme-toggle-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
 }
