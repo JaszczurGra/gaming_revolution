@@ -1,1 +1,87 @@
-[]
+[
+  {
+    "id": "game_1789478349650",
+    "userId": "user_alex",
+    "title": "LawsOfChess",
+    "category": "board_game",
+    "createdAt": "2026-09-15T15:19:09.648336",
+    "updatedAt": "2026-09-15T15:20:37.349405",
+    "status": "in_progress",
+    "currentTurn": 1,
+    "activePlayerIndex": 0,
+    "activeChatbotRole": "teacher",
+    "players": [
+      {
+        "id": "p1",
+        "name": "Alex The Grandmaster",
+        "isAi": false,
+        "score": 0,
+        "color": "#3B82F6",
+        "status": "active"
+      },
+      {
+        "id": "p2",
+        "name": "AI Opponent",
+        "isAi": true,
+        "score": 0,
+        "color": "#10B981",
+        "status": "active"
+      }
+    ],
+    "ruleSource": {
+      "fileName": "LawsOfChess.pdf",
+      "fileType": "pdf",
+      "fileSize": "293.6 KB",
+      "uploadedAt": "2026-09-15T13:19:09.637Z",
+      "hasPdf": true,
+      "textContent": null
+    },
+    "ruleAnalysis": {
+      "title": "LawsOfChess",
+      "overview": " 1 \nE.I.01 \n \nFIDE LAWS of CHESS \n \nContents: \n \n PREFACE page 2 \n \n BASIC RULES OF PLAY \n \nArticle 1: The nature and objectives of the game of chess page 2 \n \nArticle 2: The initial position of the p...",
+      "winCondition": "First player to achieve maximum victory score or complete scenario objective.",
+      "turnStructure": [
+        "Phase 1: Roll dice or draw resource cards",
+        "Phase 2: Trade or strategize actions",
+        "Phase 3: Execute movement, building, or tactical abilities",
+        "Phase 4: Pass turn to next player clockwise"
+      ],
+      "keyRules": [
+        "Players take turns in sequential clockwise order.",
+        "Must follow distance, resource, and movement constraints specified in rules.",
+        "Actions can be verified by the AI Arbiter."
+      ],
+      "forbiddenMoves": [
+        "Moving or acting out of turn",
+        "Exceeding resource or hand limits without discarding",
+        "Violating spatial distance constraints"
+      ],
+      "teacherTips": [
+        "Focus on steady early-game resource production.",
+        "Keep track of leading opponent's score count.",
+        "Ask the AI Teacher if card phrasing is ever ambiguous!"
+      ],
+      "judgeChecklist": [
+        "Verify turn phase sequence",
+        "Check resource payment costs before building",
+        "Confirm target eligibility for action cards"
+      ],
+      "playerStrategy": "Balanced and tactical play, exploiting opponent openings while maintaining strong defenses."
+    },
+    "agentConfig": null,
+    "moves": [],
+    "chatHistory": [
+      {
+        "id": "msg_init",
+        "sender": "bot",
+        "role": "teacher",
+        "text": "Welcome to LawsOfChess! I have analyzed your rules and I am ready in TEACHER mode. How would you like to begin?",
+        "timestamp": "2026-09-15T15:19:09.648336"
+      }
+    ],
+    "boardNotes": "Game initialized. Round 1 has begun.",
+    "photos": [],
+    "milestones": [],
+    "boardAnalysisHistory": []
+  }
+]
