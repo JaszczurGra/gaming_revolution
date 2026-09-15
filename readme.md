@@ -1,0 +1,1 @@
+Model is located in backend/rag

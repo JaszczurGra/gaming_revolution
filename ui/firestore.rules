@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid'])
+        && (data.uid == request.auth.uid)
+        && (data.get('email', '') is string && data.get('email', '').size() <= 256)
+        && (data.get('isPro', false) is bool)
+        && (data.get('lastPlayedDate', '') is string && data.get('lastPlayedDate', '').size() <= 24)
+        && (data.get('dailyGameCount', 0) is int)
+        && (data.get('createdAt', '') is string && data.get('createdAt', '').size() <= 50);
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && request.auth.uid == userId;
+      allow create: if isSignedIn() && isValidId(userId) && userId == request.auth.uid && isValidUser(incoming());
+      allow update: if isSignedIn() && request.auth.uid == userId && isValidUser(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['isPro', 'lastPlayedDate', 'dailyGameCount', 'email'])
+      );
+    }
+
+    function isValidGameProfile(data) {
+      return data.keys().hasAll(['ownerId', 'name'])
+        && (data.ownerId == request.auth.uid)
+        && (data.name is string && data.name.size() <= 256)
+        && (data.get('pdfUrl', '') is string && data.get('pdfUrl', '').size() <= 1024)
+        && (data.get('notes', '') is string && data.get('notes', '').size() <= 5000)
+        && (data.get('createdAt', '') is string && data.get('createdAt', '').size() <= 50);
+    }
+
+    match /games/{gameId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(gameId) && isValidGameProfile(incoming());
+      allow update: if isSignedIn() && resource.data.ownerId == request.auth.uid && isValidGameProfile(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['name', 'pdfUrl', 'notes'])
+      ) && incoming().ownerId == existing().ownerId;
+      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+    }
+
+    function isValidSession(data) {
+      return data.keys().hasAll(['ownerId', 'gameId', 'status'])
+        && (data.ownerId == request.auth.uid)
+        && (data.gameId is string && data.gameId.size() <= 128)
+        && (data.status in ['ongoing', 'finished'])
+        && (data.get('outcome', '') is string && data.get('outcome', '').size() <= 50)
+        && (data.get('history', []) is list)
+        && (data.get('createdAt', '') is string && data.get('createdAt', '').size() <= 50)
+        && (data.get('updatedAt', '') is string && data.get('updatedAt', '').size() <= 50);
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if isSignedIn() && isValidId(sessionId) && isValidSession(incoming())
+        && exists(/databases/$(database)/documents/games/$(incoming().gameId));
+      allow update: if isSignedIn() && resource.data.ownerId == request.auth.uid && isValidSession(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['status', 'outcome', 'updatedAt', 'history'])
+      ) && incoming().ownerId == existing().ownerId && incoming().gameId == existing().gameId;
+      allow delete: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+    }
+  }
+}

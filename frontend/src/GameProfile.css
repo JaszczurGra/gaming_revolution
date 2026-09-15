@@ -1,0 +1,55 @@
+.back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--accent);
+}
+
+.game-profile h1 {
+  font-size: 28px;
+  margin: 0 0 4px;
+}
+
+.open-assistant-btn {
+  display: inline-block;
+  margin: 20px 0;
+  padding: 12px 20px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.game-profile-section {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.game-profile-section h2 {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.game-profile-section textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.mock-note {
+  font-size: 12px;
+  opacity: 0.7;
+}

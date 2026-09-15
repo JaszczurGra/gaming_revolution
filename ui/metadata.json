@@ -1,0 +1,10 @@
+{
+  "name": "Boardify",
+  "description": "Master any board game with an AI companion. Upload rulebooks, ask live multimodal questions, and play against an advanced AI opponent.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

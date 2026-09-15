@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with tracking for daily games and pro status.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128, "description": "Auth User ID" },
+        "email": { "type": "string", "maxLength": 256 },
+        "isPro": { "type": "boolean", "description": "Has paid for unlimited play" },
+        "lastPlayedDate": { "type": "string", "maxLength": 24, "description": "ISO Date string" },
+        "dailyGameCount": { "type": "integer", "description": "Games played today" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["uid"]
+    },
+    "GameProfile": {
+      "title": "Game Profile",
+      "description": "Stored board game knowledge base info.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "ownerId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 256 },
+        "pdfUrl": { "type": "string", "maxLength": 1024 },
+        "notes": { "type": "string", "maxLength": 5000 },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["ownerId", "name"]
+    },
+    "GameplaySession": {
+      "title": "Gameplay Session",
+      "description": "A past gameplay session against the AI.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "ownerId": { "type": "string", "maxLength": 128 },
+        "gameId": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "maxLength": 20, "enum": ["ongoing", "finished"] },
+        "outcome": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["ownerId", "gameId", "status"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles."
+    },
+    "games/{gameId}": {
+      "schema": { "$ref": "#/entities/GameProfile" },
+      "description": "Game profiles created by users."
+    },
+    "sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/GameplaySession" },
+      "description": "Past gameplay sessions."
+    }
+  }
+}
