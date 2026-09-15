@@ -1,0 +1,103 @@
+﻿{
+ "convention": "catan-base-19hex-v1",
+ "map": "beginner-fixed",
+ "robber_start": "C3",
+ "starting_pieces": "NOT RECORDED - see booklet illustration",
+ "hexes": {
+  "A1": {
+   "terrain": "mountains",
+   "token": 10,
+   "produces": "ore"
+  },
+  "A2": {
+   "terrain": "pasture",
+   "token": 2,
+   "produces": "wool"
+  },
+  "A3": {
+   "terrain": "forest",
+   "token": 9,
+   "produces": "lumber"
+  },
+  "B1": {
+   "terrain": "fields",
+   "token": 12,
+   "produces": "grain"
+  },
+  "B2": {
+   "terrain": "hills",
+   "token": 6,
+   "produces": "brick"
+  },
+  "B3": {
+   "terrain": "pasture",
+   "token": 4,
+   "produces": "wool"
+  },
+  "B4": {
+   "terrain": "hills",
+   "token": 10,
+   "produces": "brick"
+  },
+  "C1": {
+   "terrain": "fields",
+   "token": 9,
+   "produces": "grain"
+  },
+  "C2": {
+   "terrain": "forest",
+   "token": 11,
+   "produces": "lumber"
+  },
+  "C3": {
+   "terrain": "desert",
+   "token": null,
+   "produces": null
+  },
+  "C4": {
+   "terrain": "pasture",
+   "token": 3,
+   "produces": "wool"
+  },
+  "C5": {
+   "terrain": "mountains",
+   "token": 8,
+   "produces": "ore"
+  },
+  "D1": {
+   "terrain": "forest",
+   "token": 8,
+   "produces": "lumber"
+  },
+  "D2": {
+   "terrain": "mountains",
+   "token": 3,
+   "produces": "ore"
+  },
+  "D3": {
+   "terrain": "fields",
+   "token": 4,
+   "produces": "grain"
+  },
+  "D4": {
+   "terrain": "pasture",
+   "token": 5,
+   "produces": "wool"
+  },
+  "E1": {
+   "terrain": "fields",
+   "token": 5,
+   "produces": "grain"
+  },
+  "E2": {
+   "terrain": "hills",
+   "token": 6,
+   "produces": "brick"
+  },
+  "E3": {
+   "terrain": "forest",
+   "token": 11,
+   "produces": "lumber"
+  }
+ }
+}

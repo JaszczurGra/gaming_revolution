@@ -1,0 +1,32 @@
+[
+  {
+    "id": "user_alex",
+    "username": "alex_master",
+    "displayName": "Alex The Grandmaster",
+    "avatar": "🧙‍♂️",
+    "title": "Tabletop Veteran",
+    "gamesPlayed": 0,
+    "gamesWon": 0,
+    "joinedAt": "2026-01-10"
+  },
+  {
+    "id": "user_sarah",
+    "username": "sarah_dice",
+    "displayName": "Sarah DiceRoller",
+    "avatar": "🎲",
+    "title": "Board Game Champion",
+    "gamesPlayed": 0,
+    "gamesWon": 0,
+    "joinedAt": "2026-02-04"
+  },
+  {
+    "id": "user_marcus",
+    "username": "marcus_judge",
+    "displayName": "Marcus Arbiter",
+    "avatar": "⚖️",
+    "title": "Tournament Judge",
+    "gamesPlayed": 0,
+    "gamesWon": 0,
+    "joinedAt": "2026-03-01"
+  }
+]

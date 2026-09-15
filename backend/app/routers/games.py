@@ -6,7 +6,7 @@ from fastapi import APIRouter, HTTPException, Header, Query
 from backend.app.config import GAMES_FILE, USERS_FILE
 from backend.app.models.game import CreateGameRequest, MoveRequest
 from backend.app.services.storage import load_json, save_json, DEFAULT_USERS
-from backend.app.services.arbiter import evaluate_move_legality
+from backend.app.services.arbiter import evaluate_move_legality, invalidate_session
 
 router = APIRouter(tags=["Games"])
 
@@ -105,6 +105,7 @@ def delete_game(game_id: str):
     games = load_json(GAMES_FILE, [])
     filtered = [g for g in games if g.get("id") != game_id]
     save_json(GAMES_FILE, filtered)
+    invalidate_session(game_id)
     return {"success": True, "id": game_id}
 
 @router.post("/api/games/{game_id}/moves")

@@ -8,6 +8,7 @@ DIST_DIR = os.environ.get("DIST_DIR", str(BASE_DIR / "dist"))
 
 GAMES_FILE = os.path.join(DATA_DIR, "games.json")
 USERS_FILE = os.path.join(DATA_DIR, "users.json")
+RAGS_DIR = BASE_DIR / "backend" / "resources" / "rags"
 
 # Ensure data directory exists
 os.makedirs(DATA_DIR, exist_ok=True)

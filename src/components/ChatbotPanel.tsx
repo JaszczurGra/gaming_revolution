@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Game, ChatbotRole, ChatMessage } from '../types';
 import { sendChatMessage } from '../utils/api';
+import { BoardDiagram, parseBoardState } from './BoardDiagram';
 import {
   BookOpen,
   Scale,
@@ -57,6 +58,26 @@ export const ChatbotPanel: React.FC<ChatbotPanelProps> = ({ game, onUpdateGame, 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [game.chatHistory, loading]);
+
+  // Extract the most recent board-state JSON emitted by the model (<!-- BOARD_STATE_START --> blocks).
+  const BOARD_START = '<!-- BOARD_STATE_START -->';
+  const BOARD_END = '<!-- BOARD_STATE_END -->';
+  const boardState = useMemo(() => {
+    const history = game.chatHistory ?? [];
+    for (let i = history.length - 1; i >= 0; i--) {
+      const msg = history[i];
+      if (msg.sender !== 'bot') continue;
+      const text = msg.text ?? '';
+      const start = text.indexOf(BOARD_START);
+      const end = text.indexOf(BOARD_END);
+      if (start !== -1 && end !== -1) {
+        const raw = text.slice(start + BOARD_START.length, end).trim();
+        const parsed = parseBoardState(raw);
+        if (parsed) return parsed;
+      }
+    }
+    return null;
+  }, [game.chatHistory]);
 
   const handleRoleSwitch = (role: ChatbotRole) => {
     setActiveRole(role);
@@ -259,6 +280,21 @@ export const ChatbotPanel: React.FC<ChatbotPanelProps> = ({ game, onUpdateGame, 
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Live Board State Panel */}
+      <div className="px-3 py-2 border-t border-slate-800 bg-slate-950/40">
+        <div className="text-[10px] text-slate-400 font-semibold mb-1.5 flex items-center gap-1">
+          <Compass className="w-3 h-3 text-teal-400" />
+          Live Board State
+        </div>
+        {boardState ? (
+          <BoardDiagram board={boardState} />
+        ) : (
+          <p className="text-[10px] text-slate-600 italic">
+            Upload a photo or describe the board — the AI will render a live hex diagram here.
+          </p>
+        )}
       </div>
 
       {/* Input Form */}

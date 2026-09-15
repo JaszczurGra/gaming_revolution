@@ -1,0 +1,2031 @@
+﻿{
+ "convention": "catan-base-19hex-v1",
+ "rows": {
+  "A": 3,
+  "B": 4,
+  "C": 5,
+  "D": 4,
+  "E": 3
+ },
+ "hex_order": [
+  "A1",
+  "A2",
+  "A3",
+  "B1",
+  "B2",
+  "B3",
+  "B4",
+  "C1",
+  "C2",
+  "C3",
+  "C4",
+  "C5",
+  "D1",
+  "D2",
+  "D3",
+  "D4",
+  "E1",
+  "E2",
+  "E3"
+ ],
+ "hex_neighbors": {
+  "A1": {
+   "E": "A2",
+   "SW": "B1",
+   "SE": "B2"
+  },
+  "A2": {
+   "W": "A1",
+   "E": "A3",
+   "SW": "B2",
+   "SE": "B3"
+  },
+  "A3": {
+   "W": "A2",
+   "SW": "B3",
+   "SE": "B4"
+  },
+  "B1": {
+   "E": "B2",
+   "NE": "A1",
+   "SW": "C1",
+   "SE": "C2"
+  },
+  "B2": {
+   "W": "B1",
+   "E": "B3",
+   "NW": "A1",
+   "NE": "A2",
+   "SW": "C2",
+   "SE": "C3"
+  },
+  "B3": {
+   "W": "B2",
+   "E": "B4",
+   "NW": "A2",
+   "NE": "A3",
+   "SW": "C3",
+   "SE": "C4"
+  },
+  "B4": {
+   "W": "B3",
+   "NW": "A3",
+   "SW": "C4",
+   "SE": "C5"
+  },
+  "C1": {
+   "E": "C2",
+   "NE": "B1",
+   "SE": "D1"
+  },
+  "C2": {
+   "W": "C1",
+   "E": "C3",
+   "NW": "B1",
+   "NE": "B2",
+   "SW": "D1",
+   "SE": "D2"
+  },
+  "C3": {
+   "W": "C2",
+   "E": "C4",
+   "NW": "B2",
+   "NE": "B3",
+   "SW": "D2",
+   "SE": "D3"
+  },
+  "C4": {
+   "W": "C3",
+   "E": "C5",
+   "NW": "B3",
+   "NE": "B4",
+   "SW": "D3",
+   "SE": "D4"
+  },
+  "C5": {
+   "W": "C4",
+   "NW": "B4",
+   "SW": "D4"
+  },
+  "D1": {
+   "E": "D2",
+   "NW": "C1",
+   "NE": "C2",
+   "SE": "E1"
+  },
+  "D2": {
+   "W": "D1",
+   "E": "D3",
+   "NW": "C2",
+   "NE": "C3",
+   "SW": "E1",
+   "SE": "E2"
+  },
+  "D3": {
+   "W": "D2",
+   "E": "D4",
+   "NW": "C3",
+   "NE": "C4",
+   "SW": "E2",
+   "SE": "E3"
+  },
+  "D4": {
+   "W": "D3",
+   "NW": "C4",
+   "NE": "C5",
+   "SW": "E3"
+  },
+  "E1": {
+   "E": "E2",
+   "NW": "D1",
+   "NE": "D2"
+  },
+  "E2": {
+   "W": "E1",
+   "E": "E3",
+   "NW": "D2",
+   "NE": "D3"
+  },
+  "E3": {
+   "W": "E2",
+   "NW": "D3",
+   "NE": "D4"
+  }
+ },
+ "vertices": {
+  "A1.N": {
+   "id": "A1.N",
+   "hexes": [
+    "A1"
+   ],
+   "aliases": [
+    "A1.N"
+   ],
+   "adjacent_vertices": [
+    "A1.NE",
+    "A1.NW"
+   ],
+   "edges": [
+    "A1.N|A1.NE",
+    "A1.N|A1.NW"
+   ]
+  },
+  "A1.NE": {
+   "id": "A1.NE",
+   "hexes": [
+    "A1",
+    "A2"
+   ],
+   "aliases": [
+    "A1.NE",
+    "A2.NW"
+   ],
+   "adjacent_vertices": [
+    "A1.N",
+    "A1.SE",
+    "A2.N"
+   ],
+   "edges": [
+    "A1.NE|A1.SE",
+    "A1.NE|A2.N",
+    "A1.N|A1.NE"
+   ]
+  },
+  "A1.NW": {
+   "id": "A1.NW",
+   "hexes": [
+    "A1"
+   ],
+   "aliases": [
+    "A1.NW"
+   ],
+   "adjacent_vertices": [
+    "A1.N",
+    "A1.SW"
+   ],
+   "edges": [
+    "A1.NW|A1.SW",
+    "A1.N|A1.NW"
+   ]
+  },
+  "A1.S": {
+   "id": "A1.S",
+   "hexes": [
+    "A1",
+    "B1",
+    "B2"
+   ],
+   "aliases": [
+    "A1.S",
+    "B1.NE",
+    "B2.NW"
+   ],
+   "adjacent_vertices": [
+    "A1.SE",
+    "A1.SW",
+    "B1.SE"
+   ],
+   "edges": [
+    "A1.S|A1.SE",
+    "A1.S|A1.SW",
+    "A1.S|B1.SE"
+   ]
+  },
+  "A1.SE": {
+   "id": "A1.SE",
+   "hexes": [
+    "A1",
+    "A2",
+    "B2"
+   ],
+   "aliases": [
+    "A1.SE",
+    "A2.SW",
+    "B2.N"
+   ],
+   "adjacent_vertices": [
+    "A1.NE",
+    "A1.S",
+    "A2.S"
+   ],
+   "edges": [
+    "A1.NE|A1.SE",
+    "A1.SE|A2.S",
+    "A1.S|A1.SE"
+   ]
+  },
+  "A1.SW": {
+   "id": "A1.SW",
+   "hexes": [
+    "A1",
+    "B1"
+   ],
+   "aliases": [
+    "A1.SW",
+    "B1.N"
+   ],
+   "adjacent_vertices": [
+    "A1.NW",
+    "A1.S",
+    "B1.NW"
+   ],
+   "edges": [
+    "A1.NW|A1.SW",
+    "A1.SW|B1.NW",
+    "A1.S|A1.SW"
+   ]
+  },
+  "A2.N": {
+   "id": "A2.N",
+   "hexes": [
+    "A2"
+   ],
+   "aliases": [
+    "A2.N"
+   ],
+   "adjacent_vertices": [
+    "A1.NE",
+    "A2.NE"
+   ],
+   "edges": [
+    "A1.NE|A2.N",
+    "A2.N|A2.NE"
+   ]
+  },
+  "A2.NE": {
+   "id": "A2.NE",
+   "hexes": [
+    "A2",
+    "A3"
+   ],
+   "aliases": [
+    "A2.NE",
+    "A3.NW"
+   ],
+   "adjacent_vertices": [
+    "A2.N",
+    "A2.SE",
+    "A3.N"
+   ],
+   "edges": [
+    "A2.NE|A2.SE",
+    "A2.NE|A3.N",
+    "A2.N|A2.NE"
+   ]
+  },
+  "A2.S": {
+   "id": "A2.S",
+   "hexes": [
+    "A2",
+    "B2",
+    "B3"
+   ],
+   "aliases": [
+    "A2.S",
+    "B2.NE",
+    "B3.NW"
+   ],
+   "adjacent_vertices": [
+    "A1.SE",
+    "A2.SE",
+    "B2.SE"
+   ],
+   "edges": [
+    "A1.SE|A2.S",
+    "A2.S|A2.SE",
+    "A2.S|B2.SE"
+   ]
+  },
+  "A2.SE": {
+   "id": "A2.SE",
+   "hexes": [
+    "A2",
+    "A3",
+    "B3"
+   ],
+   "aliases": [
+    "A2.SE",
+    "A3.SW",
+    "B3.N"
+   ],
+   "adjacent_vertices": [
+    "A2.NE",
+    "A2.S",
+    "A3.S"
+   ],
+   "edges": [
+    "A2.NE|A2.SE",
+    "A2.SE|A3.S",
+    "A2.S|A2.SE"
+   ]
+  },
+  "A3.N": {
+   "id": "A3.N",
+   "hexes": [
+    "A3"
+   ],
+   "aliases": [
+    "A3.N"
+   ],
+   "adjacent_vertices": [
+    "A2.NE",
+    "A3.NE"
+   ],
+   "edges": [
+    "A2.NE|A3.N",
+    "A3.N|A3.NE"
+   ]
+  },
+  "A3.NE": {
+   "id": "A3.NE",
+   "hexes": [
+    "A3"
+   ],
+   "aliases": [
+    "A3.NE"
+   ],
+   "adjacent_vertices": [
+    "A3.N",
+    "A3.SE"
+   ],
+   "edges": [
+    "A3.NE|A3.SE",
+    "A3.N|A3.NE"
+   ]
+  },
+  "A3.S": {
+   "id": "A3.S",
+   "hexes": [
+    "A3",
+    "B3",
+    "B4"
+   ],
+   "aliases": [
+    "A3.S",
+    "B3.NE",
+    "B4.NW"
+   ],
+   "adjacent_vertices": [
+    "A2.SE",
+    "A3.SE",
+    "B3.SE"
+   ],
+   "edges": [
+    "A2.SE|A3.S",
+    "A3.S|A3.SE",
+    "A3.S|B3.SE"
+   ]
+  },
+  "A3.SE": {
+   "id": "A3.SE",
+   "hexes": [
+    "A3",
+    "B4"
+   ],
+   "aliases": [
+    "A3.SE",
+    "B4.N"
+   ],
+   "adjacent_vertices": [
+    "A3.NE",
+    "A3.S",
+    "B4.NE"
+   ],
+   "edges": [
+    "A3.NE|A3.SE",
+    "A3.SE|B4.NE",
+    "A3.S|A3.SE"
+   ]
+  },
+  "B1.NW": {
+   "id": "B1.NW",
+   "hexes": [
+    "B1"
+   ],
+   "aliases": [
+    "B1.NW"
+   ],
+   "adjacent_vertices": [
+    "A1.SW",
+    "B1.SW"
+   ],
+   "edges": [
+    "A1.SW|B1.NW",
+    "B1.NW|B1.SW"
+   ]
+  },
+  "B1.S": {
+   "id": "B1.S",
+   "hexes": [
+    "B1",
+    "C1",
+    "C2"
+   ],
+   "aliases": [
+    "B1.S",
+    "C1.NE",
+    "C2.NW"
+   ],
+   "adjacent_vertices": [
+    "B1.SE",
+    "B1.SW",
+    "C1.SE"
+   ],
+   "edges": [
+    "B1.S|B1.SE",
+    "B1.S|B1.SW",
+    "B1.S|C1.SE"
+   ]
+  },
+  "B1.SE": {
+   "id": "B1.SE",
+   "hexes": [
+    "B1",
+    "B2",
+    "C2"
+   ],
+   "aliases": [
+    "B1.SE",
+    "B2.SW",
+    "C2.N"
+   ],
+   "adjacent_vertices": [
+    "A1.S",
+    "B1.S",
+    "B2.S"
+   ],
+   "edges": [
+    "A1.S|B1.SE",
+    "B1.SE|B2.S",
+    "B1.S|B1.SE"
+   ]
+  },
+  "B1.SW": {
+   "id": "B1.SW",
+   "hexes": [
+    "B1",
+    "C1"
+   ],
+   "aliases": [
+    "B1.SW",
+    "C1.N"
+   ],
+   "adjacent_vertices": [
+    "B1.NW",
+    "B1.S",
+    "C1.NW"
+   ],
+   "edges": [
+    "B1.NW|B1.SW",
+    "B1.SW|C1.NW",
+    "B1.S|B1.SW"
+   ]
+  },
+  "B2.S": {
+   "id": "B2.S",
+   "hexes": [
+    "B2",
+    "C2",
+    "C3"
+   ],
+   "aliases": [
+    "B2.S",
+    "C2.NE",
+    "C3.NW"
+   ],
+   "adjacent_vertices": [
+    "B1.SE",
+    "B2.SE",
+    "C2.SE"
+   ],
+   "edges": [
+    "B1.SE|B2.S",
+    "B2.S|B2.SE",
+    "B2.S|C2.SE"
+   ]
+  },
+  "B2.SE": {
+   "id": "B2.SE",
+   "hexes": [
+    "B2",
+    "B3",
+    "C3"
+   ],
+   "aliases": [
+    "B2.SE",
+    "B3.SW",
+    "C3.N"
+   ],
+   "adjacent_vertices": [
+    "A2.S",
+    "B2.S",
+    "B3.S"
+   ],
+   "edges": [
+    "A2.S|B2.SE",
+    "B2.SE|B3.S",
+    "B2.S|B2.SE"
+   ]
+  },
+  "B3.S": {
+   "id": "B3.S",
+   "hexes": [
+    "B3",
+    "C3",
+    "C4"
+   ],
+   "aliases": [
+    "B3.S",
+    "C3.NE",
+    "C4.NW"
+   ],
+   "adjacent_vertices": [
+    "B2.SE",
+    "B3.SE",
+    "C3.SE"
+   ],
+   "edges": [
+    "B2.SE|B3.S",
+    "B3.S|B3.SE",
+    "B3.S|C3.SE"
+   ]
+  },
+  "B3.SE": {
+   "id": "B3.SE",
+   "hexes": [
+    "B3",
+    "B4",
+    "C4"
+   ],
+   "aliases": [
+    "B3.SE",
+    "B4.SW",
+    "C4.N"
+   ],
+   "adjacent_vertices": [
+    "A3.S",
+    "B3.S",
+    "B4.S"
+   ],
+   "edges": [
+    "A3.S|B3.SE",
+    "B3.SE|B4.S",
+    "B3.S|B3.SE"
+   ]
+  },
+  "B4.NE": {
+   "id": "B4.NE",
+   "hexes": [
+    "B4"
+   ],
+   "aliases": [
+    "B4.NE"
+   ],
+   "adjacent_vertices": [
+    "A3.SE",
+    "B4.SE"
+   ],
+   "edges": [
+    "A3.SE|B4.NE",
+    "B4.NE|B4.SE"
+   ]
+  },
+  "B4.S": {
+   "id": "B4.S",
+   "hexes": [
+    "B4",
+    "C4",
+    "C5"
+   ],
+   "aliases": [
+    "B4.S",
+    "C4.NE",
+    "C5.NW"
+   ],
+   "adjacent_vertices": [
+    "B3.SE",
+    "B4.SE",
+    "C4.SE"
+   ],
+   "edges": [
+    "B3.SE|B4.S",
+    "B4.S|B4.SE",
+    "B4.S|C4.SE"
+   ]
+  },
+  "B4.SE": {
+   "id": "B4.SE",
+   "hexes": [
+    "B4",
+    "C5"
+   ],
+   "aliases": [
+    "B4.SE",
+    "C5.N"
+   ],
+   "adjacent_vertices": [
+    "B4.NE",
+    "B4.S",
+    "C5.NE"
+   ],
+   "edges": [
+    "B4.NE|B4.SE",
+    "B4.SE|C5.NE",
+    "B4.S|B4.SE"
+   ]
+  },
+  "C1.NW": {
+   "id": "C1.NW",
+   "hexes": [
+    "C1"
+   ],
+   "aliases": [
+    "C1.NW"
+   ],
+   "adjacent_vertices": [
+    "B1.SW",
+    "C1.SW"
+   ],
+   "edges": [
+    "B1.SW|C1.NW",
+    "C1.NW|C1.SW"
+   ]
+  },
+  "C1.S": {
+   "id": "C1.S",
+   "hexes": [
+    "C1",
+    "D1"
+   ],
+   "aliases": [
+    "C1.S",
+    "D1.NW"
+   ],
+   "adjacent_vertices": [
+    "C1.SE",
+    "C1.SW",
+    "D1.SW"
+   ],
+   "edges": [
+    "C1.S|C1.SE",
+    "C1.S|C1.SW",
+    "C1.S|D1.SW"
+   ]
+  },
+  "C1.SE": {
+   "id": "C1.SE",
+   "hexes": [
+    "C1",
+    "C2",
+    "D1"
+   ],
+   "aliases": [
+    "C1.SE",
+    "C2.SW",
+    "D1.N"
+   ],
+   "adjacent_vertices": [
+    "B1.S",
+    "C1.S",
+    "C2.S"
+   ],
+   "edges": [
+    "B1.S|C1.SE",
+    "C1.SE|C2.S",
+    "C1.S|C1.SE"
+   ]
+  },
+  "C1.SW": {
+   "id": "C1.SW",
+   "hexes": [
+    "C1"
+   ],
+   "aliases": [
+    "C1.SW"
+   ],
+   "adjacent_vertices": [
+    "C1.NW",
+    "C1.S"
+   ],
+   "edges": [
+    "C1.NW|C1.SW",
+    "C1.S|C1.SW"
+   ]
+  },
+  "C2.S": {
+   "id": "C2.S",
+   "hexes": [
+    "C2",
+    "D1",
+    "D2"
+   ],
+   "aliases": [
+    "C2.S",
+    "D1.NE",
+    "D2.NW"
+   ],
+   "adjacent_vertices": [
+    "C1.SE",
+    "C2.SE",
+    "D1.SE"
+   ],
+   "edges": [
+    "C1.SE|C2.S",
+    "C2.S|C2.SE",
+    "C2.S|D1.SE"
+   ]
+  },
+  "C2.SE": {
+   "id": "C2.SE",
+   "hexes": [
+    "C2",
+    "C3",
+    "D2"
+   ],
+   "aliases": [
+    "C2.SE",
+    "C3.SW",
+    "D2.N"
+   ],
+   "adjacent_vertices": [
+    "B2.S",
+    "C2.S",
+    "C3.S"
+   ],
+   "edges": [
+    "B2.S|C2.SE",
+    "C2.SE|C3.S",
+    "C2.S|C2.SE"
+   ]
+  },
+  "C3.S": {
+   "id": "C3.S",
+   "hexes": [
+    "C3",
+    "D2",
+    "D3"
+   ],
+   "aliases": [
+    "C3.S",
+    "D2.NE",
+    "D3.NW"
+   ],
+   "adjacent_vertices": [
+    "C2.SE",
+    "C3.SE",
+    "D2.SE"
+   ],
+   "edges": [
+    "C2.SE|C3.S",
+    "C3.S|C3.SE",
+    "C3.S|D2.SE"
+   ]
+  },
+  "C3.SE": {
+   "id": "C3.SE",
+   "hexes": [
+    "C3",
+    "C4",
+    "D3"
+   ],
+   "aliases": [
+    "C3.SE",
+    "C4.SW",
+    "D3.N"
+   ],
+   "adjacent_vertices": [
+    "B3.S",
+    "C3.S",
+    "C4.S"
+   ],
+   "edges": [
+    "B3.S|C3.SE",
+    "C3.SE|C4.S",
+    "C3.S|C3.SE"
+   ]
+  },
+  "C4.S": {
+   "id": "C4.S",
+   "hexes": [
+    "C4",
+    "D3",
+    "D4"
+   ],
+   "aliases": [
+    "C4.S",
+    "D3.NE",
+    "D4.NW"
+   ],
+   "adjacent_vertices": [
+    "C3.SE",
+    "C4.SE",
+    "D3.SE"
+   ],
+   "edges": [
+    "C3.SE|C4.S",
+    "C4.S|C4.SE",
+    "C4.S|D3.SE"
+   ]
+  },
+  "C4.SE": {
+   "id": "C4.SE",
+   "hexes": [
+    "C4",
+    "C5",
+    "D4"
+   ],
+   "aliases": [
+    "C4.SE",
+    "C5.SW",
+    "D4.N"
+   ],
+   "adjacent_vertices": [
+    "B4.S",
+    "C4.S",
+    "C5.S"
+   ],
+   "edges": [
+    "B4.S|C4.SE",
+    "C4.SE|C5.S",
+    "C4.S|C4.SE"
+   ]
+  },
+  "C5.NE": {
+   "id": "C5.NE",
+   "hexes": [
+    "C5"
+   ],
+   "aliases": [
+    "C5.NE"
+   ],
+   "adjacent_vertices": [
+    "B4.SE",
+    "C5.SE"
+   ],
+   "edges": [
+    "B4.SE|C5.NE",
+    "C5.NE|C5.SE"
+   ]
+  },
+  "C5.S": {
+   "id": "C5.S",
+   "hexes": [
+    "C5",
+    "D4"
+   ],
+   "aliases": [
+    "C5.S",
+    "D4.NE"
+   ],
+   "adjacent_vertices": [
+    "C4.SE",
+    "C5.SE",
+    "D4.SE"
+   ],
+   "edges": [
+    "C4.SE|C5.S",
+    "C5.S|C5.SE",
+    "C5.S|D4.SE"
+   ]
+  },
+  "C5.SE": {
+   "id": "C5.SE",
+   "hexes": [
+    "C5"
+   ],
+   "aliases": [
+    "C5.SE"
+   ],
+   "adjacent_vertices": [
+    "C5.NE",
+    "C5.S"
+   ],
+   "edges": [
+    "C5.NE|C5.SE",
+    "C5.S|C5.SE"
+   ]
+  },
+  "D1.S": {
+   "id": "D1.S",
+   "hexes": [
+    "D1",
+    "E1"
+   ],
+   "aliases": [
+    "D1.S",
+    "E1.NW"
+   ],
+   "adjacent_vertices": [
+    "D1.SE",
+    "D1.SW",
+    "E1.SW"
+   ],
+   "edges": [
+    "D1.S|D1.SE",
+    "D1.S|D1.SW",
+    "D1.S|E1.SW"
+   ]
+  },
+  "D1.SE": {
+   "id": "D1.SE",
+   "hexes": [
+    "D1",
+    "D2",
+    "E1"
+   ],
+   "aliases": [
+    "D1.SE",
+    "D2.SW",
+    "E1.N"
+   ],
+   "adjacent_vertices": [
+    "C2.S",
+    "D1.S",
+    "D2.S"
+   ],
+   "edges": [
+    "C2.S|D1.SE",
+    "D1.SE|D2.S",
+    "D1.S|D1.SE"
+   ]
+  },
+  "D1.SW": {
+   "id": "D1.SW",
+   "hexes": [
+    "D1"
+   ],
+   "aliases": [
+    "D1.SW"
+   ],
+   "adjacent_vertices": [
+    "C1.S",
+    "D1.S"
+   ],
+   "edges": [
+    "C1.S|D1.SW",
+    "D1.S|D1.SW"
+   ]
+  },
+  "D2.S": {
+   "id": "D2.S",
+   "hexes": [
+    "D2",
+    "E1",
+    "E2"
+   ],
+   "aliases": [
+    "D2.S",
+    "E1.NE",
+    "E2.NW"
+   ],
+   "adjacent_vertices": [
+    "D1.SE",
+    "D2.SE",
+    "E1.SE"
+   ],
+   "edges": [
+    "D1.SE|D2.S",
+    "D2.S|D2.SE",
+    "D2.S|E1.SE"
+   ]
+  },
+  "D2.SE": {
+   "id": "D2.SE",
+   "hexes": [
+    "D2",
+    "D3",
+    "E2"
+   ],
+   "aliases": [
+    "D2.SE",
+    "D3.SW",
+    "E2.N"
+   ],
+   "adjacent_vertices": [
+    "C3.S",
+    "D2.S",
+    "D3.S"
+   ],
+   "edges": [
+    "C3.S|D2.SE",
+    "D2.SE|D3.S",
+    "D2.S|D2.SE"
+   ]
+  },
+  "D3.S": {
+   "id": "D3.S",
+   "hexes": [
+    "D3",
+    "E2",
+    "E3"
+   ],
+   "aliases": [
+    "D3.S",
+    "E2.NE",
+    "E3.NW"
+   ],
+   "adjacent_vertices": [
+    "D2.SE",
+    "D3.SE",
+    "E2.SE"
+   ],
+   "edges": [
+    "D2.SE|D3.S",
+    "D3.S|D3.SE",
+    "D3.S|E2.SE"
+   ]
+  },
+  "D3.SE": {
+   "id": "D3.SE",
+   "hexes": [
+    "D3",
+    "D4",
+    "E3"
+   ],
+   "aliases": [
+    "D3.SE",
+    "D4.SW",
+    "E3.N"
+   ],
+   "adjacent_vertices": [
+    "C4.S",
+    "D3.S",
+    "D4.S"
+   ],
+   "edges": [
+    "C4.S|D3.SE",
+    "D3.SE|D4.S",
+    "D3.S|D3.SE"
+   ]
+  },
+  "D4.S": {
+   "id": "D4.S",
+   "hexes": [
+    "D4",
+    "E3"
+   ],
+   "aliases": [
+    "D4.S",
+    "E3.NE"
+   ],
+   "adjacent_vertices": [
+    "D3.SE",
+    "D4.SE",
+    "E3.SE"
+   ],
+   "edges": [
+    "D3.SE|D4.S",
+    "D4.S|D4.SE",
+    "D4.S|E3.SE"
+   ]
+  },
+  "D4.SE": {
+   "id": "D4.SE",
+   "hexes": [
+    "D4"
+   ],
+   "aliases": [
+    "D4.SE"
+   ],
+   "adjacent_vertices": [
+    "C5.S",
+    "D4.S"
+   ],
+   "edges": [
+    "C5.S|D4.SE",
+    "D4.S|D4.SE"
+   ]
+  },
+  "E1.S": {
+   "id": "E1.S",
+   "hexes": [
+    "E1"
+   ],
+   "aliases": [
+    "E1.S"
+   ],
+   "adjacent_vertices": [
+    "E1.SE",
+    "E1.SW"
+   ],
+   "edges": [
+    "E1.S|E1.SE",
+    "E1.S|E1.SW"
+   ]
+  },
+  "E1.SE": {
+   "id": "E1.SE",
+   "hexes": [
+    "E1",
+    "E2"
+   ],
+   "aliases": [
+    "E1.SE",
+    "E2.SW"
+   ],
+   "adjacent_vertices": [
+    "D2.S",
+    "E1.S",
+    "E2.S"
+   ],
+   "edges": [
+    "D2.S|E1.SE",
+    "E1.SE|E2.S",
+    "E1.S|E1.SE"
+   ]
+  },
+  "E1.SW": {
+   "id": "E1.SW",
+   "hexes": [
+    "E1"
+   ],
+   "aliases": [
+    "E1.SW"
+   ],
+   "adjacent_vertices": [
+    "D1.S",
+    "E1.S"
+   ],
+   "edges": [
+    "D1.S|E1.SW",
+    "E1.S|E1.SW"
+   ]
+  },
+  "E2.S": {
+   "id": "E2.S",
+   "hexes": [
+    "E2"
+   ],
+   "aliases": [
+    "E2.S"
+   ],
+   "adjacent_vertices": [
+    "E1.SE",
+    "E2.SE"
+   ],
+   "edges": [
+    "E1.SE|E2.S",
+    "E2.S|E2.SE"
+   ]
+  },
+  "E2.SE": {
+   "id": "E2.SE",
+   "hexes": [
+    "E2",
+    "E3"
+   ],
+   "aliases": [
+    "E2.SE",
+    "E3.SW"
+   ],
+   "adjacent_vertices": [
+    "D3.S",
+    "E2.S",
+    "E3.S"
+   ],
+   "edges": [
+    "D3.S|E2.SE",
+    "E2.SE|E3.S",
+    "E2.S|E2.SE"
+   ]
+  },
+  "E3.S": {
+   "id": "E3.S",
+   "hexes": [
+    "E3"
+   ],
+   "aliases": [
+    "E3.S"
+   ],
+   "adjacent_vertices": [
+    "E2.SE",
+    "E3.SE"
+   ],
+   "edges": [
+    "E2.SE|E3.S",
+    "E3.S|E3.SE"
+   ]
+  },
+  "E3.SE": {
+   "id": "E3.SE",
+   "hexes": [
+    "E3"
+   ],
+   "aliases": [
+    "E3.SE"
+   ],
+   "adjacent_vertices": [
+    "D4.S",
+    "E3.S"
+   ],
+   "edges": [
+    "D4.S|E3.SE",
+    "E3.S|E3.SE"
+   ]
+  }
+ },
+ "edges": {
+  "A1.NE|A1.SE": {
+   "id": "A1.NE|A1.SE",
+   "endpoints": [
+    "A1.NE",
+    "A1.SE"
+   ],
+   "hexes": [
+    "A1",
+    "A2"
+   ]
+  },
+  "A1.NE|A2.N": {
+   "id": "A1.NE|A2.N",
+   "endpoints": [
+    "A1.NE",
+    "A2.N"
+   ],
+   "hexes": [
+    "A2"
+   ]
+  },
+  "A1.NW|A1.SW": {
+   "id": "A1.NW|A1.SW",
+   "endpoints": [
+    "A1.NW",
+    "A1.SW"
+   ],
+   "hexes": [
+    "A1"
+   ]
+  },
+  "A1.N|A1.NE": {
+   "id": "A1.N|A1.NE",
+   "endpoints": [
+    "A1.N",
+    "A1.NE"
+   ],
+   "hexes": [
+    "A1"
+   ]
+  },
+  "A1.N|A1.NW": {
+   "id": "A1.N|A1.NW",
+   "endpoints": [
+    "A1.N",
+    "A1.NW"
+   ],
+   "hexes": [
+    "A1"
+   ]
+  },
+  "A1.SE|A2.S": {
+   "id": "A1.SE|A2.S",
+   "endpoints": [
+    "A1.SE",
+    "A2.S"
+   ],
+   "hexes": [
+    "A2",
+    "B2"
+   ]
+  },
+  "A1.SW|B1.NW": {
+   "id": "A1.SW|B1.NW",
+   "endpoints": [
+    "A1.SW",
+    "B1.NW"
+   ],
+   "hexes": [
+    "B1"
+   ]
+  },
+  "A1.S|A1.SE": {
+   "id": "A1.S|A1.SE",
+   "endpoints": [
+    "A1.S",
+    "A1.SE"
+   ],
+   "hexes": [
+    "A1",
+    "B2"
+   ]
+  },
+  "A1.S|A1.SW": {
+   "id": "A1.S|A1.SW",
+   "endpoints": [
+    "A1.S",
+    "A1.SW"
+   ],
+   "hexes": [
+    "A1",
+    "B1"
+   ]
+  },
+  "A1.S|B1.SE": {
+   "id": "A1.S|B1.SE",
+   "endpoints": [
+    "A1.S",
+    "B1.SE"
+   ],
+   "hexes": [
+    "B1",
+    "B2"
+   ]
+  },
+  "A2.NE|A2.SE": {
+   "id": "A2.NE|A2.SE",
+   "endpoints": [
+    "A2.NE",
+    "A2.SE"
+   ],
+   "hexes": [
+    "A2",
+    "A3"
+   ]
+  },
+  "A2.NE|A3.N": {
+   "id": "A2.NE|A3.N",
+   "endpoints": [
+    "A2.NE",
+    "A3.N"
+   ],
+   "hexes": [
+    "A3"
+   ]
+  },
+  "A2.N|A2.NE": {
+   "id": "A2.N|A2.NE",
+   "endpoints": [
+    "A2.N",
+    "A2.NE"
+   ],
+   "hexes": [
+    "A2"
+   ]
+  },
+  "A2.SE|A3.S": {
+   "id": "A2.SE|A3.S",
+   "endpoints": [
+    "A2.SE",
+    "A3.S"
+   ],
+   "hexes": [
+    "A3",
+    "B3"
+   ]
+  },
+  "A2.S|A2.SE": {
+   "id": "A2.S|A2.SE",
+   "endpoints": [
+    "A2.S",
+    "A2.SE"
+   ],
+   "hexes": [
+    "A2",
+    "B3"
+   ]
+  },
+  "A2.S|B2.SE": {
+   "id": "A2.S|B2.SE",
+   "endpoints": [
+    "A2.S",
+    "B2.SE"
+   ],
+   "hexes": [
+    "B2",
+    "B3"
+   ]
+  },
+  "A3.NE|A3.SE": {
+   "id": "A3.NE|A3.SE",
+   "endpoints": [
+    "A3.NE",
+    "A3.SE"
+   ],
+   "hexes": [
+    "A3"
+   ]
+  },
+  "A3.N|A3.NE": {
+   "id": "A3.N|A3.NE",
+   "endpoints": [
+    "A3.N",
+    "A3.NE"
+   ],
+   "hexes": [
+    "A3"
+   ]
+  },
+  "A3.SE|B4.NE": {
+   "id": "A3.SE|B4.NE",
+   "endpoints": [
+    "A3.SE",
+    "B4.NE"
+   ],
+   "hexes": [
+    "B4"
+   ]
+  },
+  "A3.S|A3.SE": {
+   "id": "A3.S|A3.SE",
+   "endpoints": [
+    "A3.S",
+    "A3.SE"
+   ],
+   "hexes": [
+    "A3",
+    "B4"
+   ]
+  },
+  "A3.S|B3.SE": {
+   "id": "A3.S|B3.SE",
+   "endpoints": [
+    "A3.S",
+    "B3.SE"
+   ],
+   "hexes": [
+    "B3",
+    "B4"
+   ]
+  },
+  "B1.NW|B1.SW": {
+   "id": "B1.NW|B1.SW",
+   "endpoints": [
+    "B1.NW",
+    "B1.SW"
+   ],
+   "hexes": [
+    "B1"
+   ]
+  },
+  "B1.SE|B2.S": {
+   "id": "B1.SE|B2.S",
+   "endpoints": [
+    "B1.SE",
+    "B2.S"
+   ],
+   "hexes": [
+    "B2",
+    "C2"
+   ]
+  },
+  "B1.SW|C1.NW": {
+   "id": "B1.SW|C1.NW",
+   "endpoints": [
+    "B1.SW",
+    "C1.NW"
+   ],
+   "hexes": [
+    "C1"
+   ]
+  },
+  "B1.S|B1.SE": {
+   "id": "B1.S|B1.SE",
+   "endpoints": [
+    "B1.S",
+    "B1.SE"
+   ],
+   "hexes": [
+    "B1",
+    "C2"
+   ]
+  },
+  "B1.S|B1.SW": {
+   "id": "B1.S|B1.SW",
+   "endpoints": [
+    "B1.S",
+    "B1.SW"
+   ],
+   "hexes": [
+    "B1",
+    "C1"
+   ]
+  },
+  "B1.S|C1.SE": {
+   "id": "B1.S|C1.SE",
+   "endpoints": [
+    "B1.S",
+    "C1.SE"
+   ],
+   "hexes": [
+    "C1",
+    "C2"
+   ]
+  },
+  "B2.SE|B3.S": {
+   "id": "B2.SE|B3.S",
+   "endpoints": [
+    "B2.SE",
+    "B3.S"
+   ],
+   "hexes": [
+    "B3",
+    "C3"
+   ]
+  },
+  "B2.S|B2.SE": {
+   "id": "B2.S|B2.SE",
+   "endpoints": [
+    "B2.S",
+    "B2.SE"
+   ],
+   "hexes": [
+    "B2",
+    "C3"
+   ]
+  },
+  "B2.S|C2.SE": {
+   "id": "B2.S|C2.SE",
+   "endpoints": [
+    "B2.S",
+    "C2.SE"
+   ],
+   "hexes": [
+    "C2",
+    "C3"
+   ]
+  },
+  "B3.SE|B4.S": {
+   "id": "B3.SE|B4.S",
+   "endpoints": [
+    "B3.SE",
+    "B4.S"
+   ],
+   "hexes": [
+    "B4",
+    "C4"
+   ]
+  },
+  "B3.S|B3.SE": {
+   "id": "B3.S|B3.SE",
+   "endpoints": [
+    "B3.S",
+    "B3.SE"
+   ],
+   "hexes": [
+    "B3",
+    "C4"
+   ]
+  },
+  "B3.S|C3.SE": {
+   "id": "B3.S|C3.SE",
+   "endpoints": [
+    "B3.S",
+    "C3.SE"
+   ],
+   "hexes": [
+    "C3",
+    "C4"
+   ]
+  },
+  "B4.NE|B4.SE": {
+   "id": "B4.NE|B4.SE",
+   "endpoints": [
+    "B4.NE",
+    "B4.SE"
+   ],
+   "hexes": [
+    "B4"
+   ]
+  },
+  "B4.SE|C5.NE": {
+   "id": "B4.SE|C5.NE",
+   "endpoints": [
+    "B4.SE",
+    "C5.NE"
+   ],
+   "hexes": [
+    "C5"
+   ]
+  },
+  "B4.S|B4.SE": {
+   "id": "B4.S|B4.SE",
+   "endpoints": [
+    "B4.S",
+    "B4.SE"
+   ],
+   "hexes": [
+    "B4",
+    "C5"
+   ]
+  },
+  "B4.S|C4.SE": {
+   "id": "B4.S|C4.SE",
+   "endpoints": [
+    "B4.S",
+    "C4.SE"
+   ],
+   "hexes": [
+    "C4",
+    "C5"
+   ]
+  },
+  "C1.NW|C1.SW": {
+   "id": "C1.NW|C1.SW",
+   "endpoints": [
+    "C1.NW",
+    "C1.SW"
+   ],
+   "hexes": [
+    "C1"
+   ]
+  },
+  "C1.SE|C2.S": {
+   "id": "C1.SE|C2.S",
+   "endpoints": [
+    "C1.SE",
+    "C2.S"
+   ],
+   "hexes": [
+    "C2",
+    "D1"
+   ]
+  },
+  "C1.S|C1.SE": {
+   "id": "C1.S|C1.SE",
+   "endpoints": [
+    "C1.S",
+    "C1.SE"
+   ],
+   "hexes": [
+    "C1",
+    "D1"
+   ]
+  },
+  "C1.S|C1.SW": {
+   "id": "C1.S|C1.SW",
+   "endpoints": [
+    "C1.S",
+    "C1.SW"
+   ],
+   "hexes": [
+    "C1"
+   ]
+  },
+  "C1.S|D1.SW": {
+   "id": "C1.S|D1.SW",
+   "endpoints": [
+    "C1.S",
+    "D1.SW"
+   ],
+   "hexes": [
+    "D1"
+   ]
+  },
+  "C2.SE|C3.S": {
+   "id": "C2.SE|C3.S",
+   "endpoints": [
+    "C2.SE",
+    "C3.S"
+   ],
+   "hexes": [
+    "C3",
+    "D2"
+   ]
+  },
+  "C2.S|C2.SE": {
+   "id": "C2.S|C2.SE",
+   "endpoints": [
+    "C2.S",
+    "C2.SE"
+   ],
+   "hexes": [
+    "C2",
+    "D2"
+   ]
+  },
+  "C2.S|D1.SE": {
+   "id": "C2.S|D1.SE",
+   "endpoints": [
+    "C2.S",
+    "D1.SE"
+   ],
+   "hexes": [
+    "D1",
+    "D2"
+   ]
+  },
+  "C3.SE|C4.S": {
+   "id": "C3.SE|C4.S",
+   "endpoints": [
+    "C3.SE",
+    "C4.S"
+   ],
+   "hexes": [
+    "C4",
+    "D3"
+   ]
+  },
+  "C3.S|C3.SE": {
+   "id": "C3.S|C3.SE",
+   "endpoints": [
+    "C3.S",
+    "C3.SE"
+   ],
+   "hexes": [
+    "C3",
+    "D3"
+   ]
+  },
+  "C3.S|D2.SE": {
+   "id": "C3.S|D2.SE",
+   "endpoints": [
+    "C3.S",
+    "D2.SE"
+   ],
+   "hexes": [
+    "D2",
+    "D3"
+   ]
+  },
+  "C4.SE|C5.S": {
+   "id": "C4.SE|C5.S",
+   "endpoints": [
+    "C4.SE",
+    "C5.S"
+   ],
+   "hexes": [
+    "C5",
+    "D4"
+   ]
+  },
+  "C4.S|C4.SE": {
+   "id": "C4.S|C4.SE",
+   "endpoints": [
+    "C4.S",
+    "C4.SE"
+   ],
+   "hexes": [
+    "C4",
+    "D4"
+   ]
+  },
+  "C4.S|D3.SE": {
+   "id": "C4.S|D3.SE",
+   "endpoints": [
+    "C4.S",
+    "D3.SE"
+   ],
+   "hexes": [
+    "D3",
+    "D4"
+   ]
+  },
+  "C5.NE|C5.SE": {
+   "id": "C5.NE|C5.SE",
+   "endpoints": [
+    "C5.NE",
+    "C5.SE"
+   ],
+   "hexes": [
+    "C5"
+   ]
+  },
+  "C5.S|C5.SE": {
+   "id": "C5.S|C5.SE",
+   "endpoints": [
+    "C5.S",
+    "C5.SE"
+   ],
+   "hexes": [
+    "C5"
+   ]
+  },
+  "C5.S|D4.SE": {
+   "id": "C5.S|D4.SE",
+   "endpoints": [
+    "C5.S",
+    "D4.SE"
+   ],
+   "hexes": [
+    "D4"
+   ]
+  },
+  "D1.SE|D2.S": {
+   "id": "D1.SE|D2.S",
+   "endpoints": [
+    "D1.SE",
+    "D2.S"
+   ],
+   "hexes": [
+    "D2",
+    "E1"
+   ]
+  },
+  "D1.S|D1.SE": {
+   "id": "D1.S|D1.SE",
+   "endpoints": [
+    "D1.S",
+    "D1.SE"
+   ],
+   "hexes": [
+    "D1",
+    "E1"
+   ]
+  },
+  "D1.S|D1.SW": {
+   "id": "D1.S|D1.SW",
+   "endpoints": [
+    "D1.S",
+    "D1.SW"
+   ],
+   "hexes": [
+    "D1"
+   ]
+  },
+  "D1.S|E1.SW": {
+   "id": "D1.S|E1.SW",
+   "endpoints": [
+    "D1.S",
+    "E1.SW"
+   ],
+   "hexes": [
+    "E1"
+   ]
+  },
+  "D2.SE|D3.S": {
+   "id": "D2.SE|D3.S",
+   "endpoints": [
+    "D2.SE",
+    "D3.S"
+   ],
+   "hexes": [
+    "D3",
+    "E2"
+   ]
+  },
+  "D2.S|D2.SE": {
+   "id": "D2.S|D2.SE",
+   "endpoints": [
+    "D2.S",
+    "D2.SE"
+   ],
+   "hexes": [
+    "D2",
+    "E2"
+   ]
+  },
+  "D2.S|E1.SE": {
+   "id": "D2.S|E1.SE",
+   "endpoints": [
+    "D2.S",
+    "E1.SE"
+   ],
+   "hexes": [
+    "E1",
+    "E2"
+   ]
+  },
+  "D3.SE|D4.S": {
+   "id": "D3.SE|D4.S",
+   "endpoints": [
+    "D3.SE",
+    "D4.S"
+   ],
+   "hexes": [
+    "D4",
+    "E3"
+   ]
+  },
+  "D3.S|D3.SE": {
+   "id": "D3.S|D3.SE",
+   "endpoints": [
+    "D3.S",
+    "D3.SE"
+   ],
+   "hexes": [
+    "D3",
+    "E3"
+   ]
+  },
+  "D3.S|E2.SE": {
+   "id": "D3.S|E2.SE",
+   "endpoints": [
+    "D3.S",
+    "E2.SE"
+   ],
+   "hexes": [
+    "E2",
+    "E3"
+   ]
+  },
+  "D4.S|D4.SE": {
+   "id": "D4.S|D4.SE",
+   "endpoints": [
+    "D4.S",
+    "D4.SE"
+   ],
+   "hexes": [
+    "D4"
+   ]
+  },
+  "D4.S|E3.SE": {
+   "id": "D4.S|E3.SE",
+   "endpoints": [
+    "D4.S",
+    "E3.SE"
+   ],
+   "hexes": [
+    "E3"
+   ]
+  },
+  "E1.SE|E2.S": {
+   "id": "E1.SE|E2.S",
+   "endpoints": [
+    "E1.SE",
+    "E2.S"
+   ],
+   "hexes": [
+    "E2"
+   ]
+  },
+  "E1.S|E1.SE": {
+   "id": "E1.S|E1.SE",
+   "endpoints": [
+    "E1.S",
+    "E1.SE"
+   ],
+   "hexes": [
+    "E1"
+   ]
+  },
+  "E1.S|E1.SW": {
+   "id": "E1.S|E1.SW",
+   "endpoints": [
+    "E1.S",
+    "E1.SW"
+   ],
+   "hexes": [
+    "E1"
+   ]
+  },
+  "E2.SE|E3.S": {
+   "id": "E2.SE|E3.S",
+   "endpoints": [
+    "E2.SE",
+    "E3.S"
+   ],
+   "hexes": [
+    "E3"
+   ]
+  },
+  "E2.S|E2.SE": {
+   "id": "E2.S|E2.SE",
+   "endpoints": [
+    "E2.S",
+    "E2.SE"
+   ],
+   "hexes": [
+    "E2"
+   ]
+  },
+  "E3.S|E3.SE": {
+   "id": "E3.S|E3.SE",
+   "endpoints": [
+    "E3.S",
+    "E3.SE"
+   ],
+   "hexes": [
+    "E3"
+   ]
+  }
+ }
+}
