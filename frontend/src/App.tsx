@@ -382,7 +382,15 @@ export default function App() {
           <main className="chat chat-mobile">
             {loadingHistory && <p className="hint">Loading...</p>}
             {!loadingHistory && messages.length === 0 && <p className="hint">Take a photo to begin.</p>}
-            {lastMessage && renderBubble(lastMessage, parsedMessages.length - 1)}
+            {lastMessage?.display && (
+              <div className="bubble-mobile">
+                {lastMessage.role === 'assistant' ? (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{lastMessage.display}</ReactMarkdown>
+                ) : (
+                  lastMessage.display
+                )}
+              </div>
+            )}
             {renderTail()}
           </main>
         </div>

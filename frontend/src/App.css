@@ -57,8 +57,13 @@
   min-width: 240px;
   border-left: 1px solid var(--border);
   background: var(--bg-alt);
-  overflow-y: auto;
   padding: 16px 20px;
+  /* Stay put on the right as the chat scrolls, instead of scrolling away with the page. */
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  max-height: 100svh;
+  overflow-y: auto;
 }
 
 .board-panel h2 {
@@ -419,6 +424,22 @@
 .chat-mobile {
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
   justify-content: flex-end;
+}
+
+.bubble-mobile {
+  width: 100%;
+  max-width: none;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.bubble-mobile :first-child {
+  margin-top: 0;
+}
+
+.bubble-mobile :last-child {
+  margin-bottom: 0;
 }
