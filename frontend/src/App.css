@@ -1,0 +1,268 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.reset-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  color: var(--text-h);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.reset-btn:hover {
+  border-color: var(--accent-border);
+}
+
+.layout {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  gap: 0;
+}
+
+.chat {
+  flex: 1 1 60%;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.board-panel {
+  flex: 1 1 40%;
+  max-width: 480px;
+  min-width: 280px;
+  border-left: 1px solid var(--border);
+  background: var(--bg-alt);
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.board-panel h2 {
+  font-size: 16px;
+  margin: 0 0 12px;
+  position: sticky;
+  top: 0;
+}
+
+.board-panel-content {
+  font-size: 14px;
+}
+
+.hint {
+  color: var(--text);
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: var(--bubble-user);
+}
+
+.bubble.assistant {
+  align-self: flex-start;
+  background: var(--bubble-assistant);
+}
+
+.bubble-role {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+  margin-bottom: 4px;
+}
+
+.bubble-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.bubble-text :first-child {
+  margin-top: 0;
+}
+
+.bubble-text :last-child {
+  margin-bottom: 0;
+}
+
+.bubble.pending .typing {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.photo-chip,
+.board-chip {
+  display: inline-block;
+  font-size: 12px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  margin-bottom: 6px;
+}
+
+.thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.thumbs img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.error-banner {
+  margin: 0 20px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fee;
+  color: #a00;
+  font-size: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .error-banner {
+    background: #3a1414;
+    color: #f88;
+  }
+}
+
+.pending-strip {
+  display: flex;
+  gap: 8px;
+  padding: 10px 20px 0;
+  flex-wrap: wrap;
+}
+
+.pending-thumb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.pending-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.pending-thumb button {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  background: var(--text-h);
+  color: var(--bg);
+  cursor: pointer;
+  line-height: 1;
+  font-size: 13px;
+}
+
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.attach-btn {
+  border: 1px solid var(--border);
+  background: var(--bg-alt);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--text-h);
+  background: var(--bg);
+  max-height: 160px;
+}
+
+.composer textarea:focus {
+  outline: none;
+  border-color: var(--accent-border);
+}
+
+.send-btn {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 18px;
+  height: 40px;
+  font-size: 15px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.send-btn:disabled,
+.attach-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .board-panel {
+    max-width: none;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    max-height: 40vh;
+  }
+}
