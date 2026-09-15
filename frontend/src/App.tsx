@@ -2,9 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, DragEvent, KeyboardEvent } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { BoardDiagram, parseBoardState } from './boardDiagram'
 import './App.css'
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000'
+// Default to the backend on the same host the page was loaded from (port 8000), so this also
+// works when the page is opened from another device, e.g. over Tailscale, where "localhost"
+// would otherwise mean that other device rather than this one. Override with VITE_API_BASE.
+const API_BASE = import.meta.env.VITE_API_BASE || `${window.location.protocol}//${window.location.hostname}:8000`
 
 // Must match rag.py's BOARD_STATE_START / BOARD_STATE_END exactly.
 const BOARD_STATE_RE = /<!--\s*BOARD_STATE_START\s*-->([\s\S]*?)<!--\s*BOARD_STATE_END\s*-->/
@@ -42,6 +46,7 @@ export default function App() {
   const [error, setError] = useState('')
   const [loadingHistory, setLoadingHistory] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const cameraInputRef = useRef<HTMLInputElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -76,12 +81,17 @@ export default function App() {
     [messages],
   )
 
-  const boardState = useMemo(() => {
+  const rawBoardState = useMemo(() => {
     for (let i = parsedMessages.length - 1; i >= 0; i--) {
       if (parsedMessages[i].board) return parsedMessages[i].board
     }
     return null
   }, [parsedMessages])
+
+  const boardState = useMemo(() => (rawBoardState ? parseBoardState(rawBoardState) : null), [rawBoardState])
+
+  const lastMessageIsAssistant =
+    parsedMessages.length > 0 && parsedMessages[parsedMessages.length - 1].role === 'assistant'
 
   function addFiles(fileList: FileList) {
     const images = Array.from(fileList).filter((f) => f.type.startsWith('image/'))
@@ -90,6 +100,13 @@ export default function App() {
 
   function removePendingFile(index: number) {
     setPendingFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  async function postTurn(form: FormData): Promise<HistoryResponse> {
+    const res = await fetch(`${API_BASE}/api/turn`, { method: 'POST', body: form })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.detail || 'Request failed')
+    return data
   }
 
   async function send() {
@@ -108,10 +125,7 @@ export default function App() {
     setPendingFiles([])
 
     try {
-      const res = await fetch(`${API_BASE}/api/turn`, { method: 'POST', body: form })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.detail || 'Request failed')
-
+      const data = await postTurn(form)
       if (filesForThisTurn.length) {
         const urls = filesForThisTurn.map((f) => URL.createObjectURL(f))
         setLocalPreviews((prev) => ({ ...prev, [insertedAtIndex]: urls }))
@@ -122,6 +136,21 @@ export default function App() {
       // Give the user their draft back so nothing is lost.
       setText(trimmed)
       setPendingFiles(filesForThisTurn)
+    } finally {
+      setSending(false)
+    }
+  }
+
+  async function sendConfirmation() {
+    setSending(true)
+    setError('')
+    try {
+      const form = new FormData()
+      form.append('text', 'CONFIRMED')
+      const data = await postTurn(form)
+      setMessages(data.messages)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Request failed')
     } finally {
       setSending(false)
     }
@@ -206,15 +235,27 @@ export default function App() {
               <div className="bubble-text typing">thinking…</div>
             </div>
           )}
+
+          {!sending && lastMessageIsAssistant && (
+            <div className="confirm-bar">
+              <span>Does this look right?</span>
+              <button className="confirm-btn" onClick={sendConfirmation}>
+                ✓ Correct
+              </button>
+            </div>
+          )}
           <div ref={bottomRef} />
         </main>
 
         <aside className="board-panel">
           <h2>Current board state</h2>
           {boardState ? (
-            <div className="board-panel-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{boardState}</ReactMarkdown>
-            </div>
+            <BoardDiagram board={boardState} />
+          ) : rawBoardState ? (
+            <details className="board-fallback">
+              <summary>Couldn't render the board graphically — raw data</summary>
+              <pre>{rawBoardState}</pre>
+            </details>
           ) : (
             <p className="hint">
               Nothing yet — upload a photo of the board and the assistant's read of it will show
@@ -242,11 +283,30 @@ export default function App() {
       <footer className="composer">
         <button
           className="attach-btn"
-          onClick={() => fileInputRef.current?.click()}
-          title="Attach photo(s)"
+          onClick={() => cameraInputRef.current?.click()}
+          title="Take a photo"
           disabled={sending}
         >
-          📷
+          📸
+        </button>
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          hidden
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            if (e.target.files) addFiles(e.target.files)
+            e.target.value = ''
+          }}
+        />
+        <button
+          className="attach-btn"
+          onClick={() => fileInputRef.current?.click()}
+          title="Attach photo(s) from gallery"
+          disabled={sending}
+        >
+          🖼️
         </button>
         <input
           ref={fileInputRef}

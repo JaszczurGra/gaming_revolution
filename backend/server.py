@@ -1,6 +1,8 @@
 """FastAPI backend for the web chat UI.
 
-Run with: uvicorn server:app --reload --port 8000
+Run with: uvicorn server:app --reload --host 0.0.0.0 --port 8000
+(--host 0.0.0.0 makes it reachable from other devices, e.g. over Tailscale;
+drop it to keep the server local-only.)
 """
 
 import mimetypes
